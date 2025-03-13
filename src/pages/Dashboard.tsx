@@ -25,48 +25,48 @@ const Dashboard = () => {
   const mockTransactions = [
     {
       id: '1',
-      type: 'income',
+      type: 'income' as const,
       name: 'Client Payment',
       category: 'Services',
       amount: 2500,
       date: 'Today',
-      status: 'completed'
+      status: 'completed' as const
     },
     {
       id: '2',
-      type: 'expense',
+      type: 'expense' as const,
       name: 'Office Supplies',
       category: 'Operations',
       amount: 149.99,
       date: 'Yesterday',
-      status: 'completed'
+      status: 'completed' as const
     },
     {
       id: '3',
-      type: 'expense',
+      type: 'expense' as const,
       name: 'Cloud Services',
       category: 'Software',
       amount: 79.99,
       date: 'Apr 10, 2023',
-      status: 'pending'
+      status: 'pending' as const
     },
     {
       id: '4',
-      type: 'income',
+      type: 'income' as const,
       name: 'Consulting',
       category: 'Services',
       amount: 1200,
       date: 'Apr 8, 2023',
-      status: 'completed'
+      status: 'completed' as const
     },
     {
       id: '5',
-      type: 'expense',
+      type: 'expense' as const,
       name: 'Marketing',
       category: 'Advertising',
       amount: 350,
       date: 'Apr 5, 2023',
-      status: 'failed'
+      status: 'failed' as const
     }
   ];
   

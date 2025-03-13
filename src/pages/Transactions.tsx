@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { PageTransition } from '@/components/transitions/PageTransition';
 import DashboardLayout from '@/layout/DashboardLayout';
@@ -17,93 +16,93 @@ import { motion } from 'framer-motion';
 import { contentVariants } from '@/components/transitions/PageTransition';
 import { toast } from 'sonner';
 
-// Mock transaction data
+// Mock transaction data with proper type annotations
 const mockTransactions = [
   {
     id: 'tr1',
-    type: 'income',
+    type: 'income' as const,
     name: 'Client Payment - ABC Corp',
     category: 'Services',
     amount: 2500,
     date: '2023-04-14',
-    status: 'completed',
+    status: 'completed' as const,
     paymentMethod: 'Bank Transfer',
     reference: 'INV-001'
   },
   {
     id: 'tr2',
-    type: 'expense',
+    type: 'expense' as const,
     name: 'Office Supplies',
     category: 'Operations',
     amount: 149.99,
     date: '2023-04-13',
-    status: 'completed',
+    status: 'completed' as const,
     paymentMethod: 'Credit Card',
     reference: 'PO-113'
   },
   {
     id: 'tr3',
-    type: 'expense',
+    type: 'expense' as const,
     name: 'Cloud Services - AWS',
     category: 'Software',
     amount: 79.99,
     date: '2023-04-10',
-    status: 'pending',
+    status: 'pending' as const,
     paymentMethod: 'Credit Card',
     reference: 'AWS-Apr'
   },
   {
     id: 'tr4',
-    type: 'income',
+    type: 'income' as const,
     name: 'Consulting Services - XYZ Inc',
     category: 'Services',
     amount: 1200,
     date: '2023-04-08',
-    status: 'completed',
+    status: 'completed' as const,
     paymentMethod: 'Bank Transfer',
     reference: 'INV-002'
   },
   {
     id: 'tr5',
-    type: 'expense',
+    type: 'expense' as const,
     name: 'Marketing Campaign',
     category: 'Advertising',
     amount: 350,
     date: '2023-04-05',
-    status: 'failed',
+    status: 'failed' as const,
     paymentMethod: 'Credit Card',
     reference: 'MKT-Q2'
   },
   {
     id: 'tr6',
-    type: 'income',
+    type: 'income' as const,
     name: 'Product Sales',
     category: 'Sales',
     amount: 750,
     date: '2023-04-03',
-    status: 'completed',
+    status: 'completed' as const,
     paymentMethod: 'Cash',
     reference: 'SALE-0425'
   },
   {
     id: 'tr7',
-    type: 'expense',
+    type: 'expense' as const,
     name: 'Rent Payment',
     category: 'Rent',
     amount: 1800,
     date: '2023-04-01',
-    status: 'completed',
+    status: 'completed' as const,
     paymentMethod: 'Bank Transfer',
     reference: 'RENT-APR'
   },
   {
     id: 'tr8',
-    type: 'expense',
+    type: 'expense' as const,
     name: 'Utilities - Electricity',
     category: 'Utilities',
     amount: 120.50,
     date: '2023-03-28',
-    status: 'completed',
+    status: 'completed' as const,
     paymentMethod: 'Direct Debit',
     reference: 'UTIL-E-MAR'
   },
