@@ -2,58 +2,51 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-interface PageTransitionProps {
-  children: React.ReactNode;
-}
-
-const pageVariants = {
+// Animation variants for page content
+export const contentVariants = (staggerChildren = 0.1) => ({
   initial: {
     opacity: 0,
-    y: 10,
+    y: 20,
   },
-  enter: {
+  animate: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.4,
-      ease: [0.61, 1, 0.88, 1],
+      duration: 0.5,
+      staggerChildren: staggerChildren,
     },
   },
-  exit: {
+});
+
+// Animation variants for page header
+export const headerVariants = {
+  initial: {
     opacity: 0,
-    y: -10,
+    y: -20,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
     transition: {
-      duration: 0.3,
-      ease: [0.37, 0, 0.63, 0],
+      duration: 0.5,
     },
   },
 };
 
-export function PageTransition({ children }: PageTransitionProps) {
+interface PageTransitionProps {
+  children: React.ReactNode;
+}
+
+export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (
     <motion.div
-      initial="initial"
-      animate="enter"
-      exit="exit"
-      variants={pageVariants}
-      className="w-full min-h-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex-1 flex flex-col"
     >
       {children}
     </motion.div>
   );
-}
-
-export function contentVariants(delay = 0) {
-  return {
-    initial: { opacity: 0, y: 15 },
-    animate: { 
-      opacity: 1, 
-      y: 0, 
-      transition: {
-        duration: 0.4,
-        ease: [0.61, 1, 0.88, 1],
-        delay: delay,
-      }
-    },
-  };
-}
+};
