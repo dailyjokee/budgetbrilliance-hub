@@ -13,6 +13,7 @@ import Contacts from "./pages/Contacts";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import { TransactionProvider } from "./context/TransactionContext";
+import { ContactProvider } from "./context/ContactContext";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -22,20 +23,22 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <TransactionProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/transactions" element={<Transactions />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/reports" element={<Reports />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+          <ContactProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/transactions" element={<Transactions />} />
+                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/reports" element={<Reports />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </ContactProvider>
         </TransactionProvider>
       </TooltipProvider>
     </QueryClientProvider>
