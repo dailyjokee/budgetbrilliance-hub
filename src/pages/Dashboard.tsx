@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PageTransition } from '@/components/transitions/PageTransition';
@@ -12,6 +11,7 @@ import {
   ArrowDownRightIcon, 
   ArrowUpRightIcon 
 } from 'lucide-react';
+import { Transaction } from '@/services/transactionService';
 
 const Dashboard = () => {
   // Mock data for dashboard
@@ -22,51 +22,62 @@ const Dashboard = () => {
     { title: 'Pending Invoices', value: '$3,450.00', change: 0, icon: <ArrowDownRightIcon size={20} />, color: 'warning' },
   ];
   
-  const mockTransactions = [
+  // Updated mock transactions to include paymentMethod and reference properties
+  const mockTransactions: Transaction[] = [
     {
       id: '1',
-      type: 'income' as const,
+      type: 'income',
       name: 'Client Payment',
       category: 'Services',
       amount: 2500,
       date: 'Today',
-      status: 'completed' as const
+      status: 'completed',
+      paymentMethod: 'Bank Transfer',
+      reference: 'INV-001'
     },
     {
       id: '2',
-      type: 'expense' as const,
+      type: 'expense',
       name: 'Office Supplies',
       category: 'Operations',
       amount: 149.99,
       date: 'Yesterday',
-      status: 'completed' as const
+      status: 'completed',
+      paymentMethod: 'Credit Card',
+      reference: 'PO-113'
     },
     {
       id: '3',
-      type: 'expense' as const,
+      type: 'expense',
       name: 'Cloud Services',
       category: 'Software',
       amount: 79.99,
       date: 'Apr 10, 2023',
-      status: 'pending' as const
+      status: 'pending',
+      paymentMethod: 'Credit Card',
+      reference: 'AWS-Apr'
     },
     {
       id: '4',
-      type: 'income' as const,
+      type: 'income',
       name: 'Consulting',
       category: 'Services',
       amount: 1200,
       date: 'Apr 8, 2023',
-      status: 'completed' as const
+      status: 'completed',
+      paymentMethod: 'Bank Transfer',
+      reference: 'CONS-1234'
     },
     {
       id: '5',
-      type: 'expense' as const,
+      type: 'expense',
       name: 'Marketing',
       category: 'Advertising',
       amount: 350,
       date: 'Apr 5, 2023',
-      status: 'failed' as const
+      status: 'failed',
+      paymentMethod: 'Credit Card',
+      reference: 'MKT-042'
     }
   ];
   
