@@ -10,7 +10,10 @@ import {
   LogOut, 
   ChevronRight, 
   Menu, 
-  X 
+  X,
+  Package,
+  ShoppingCart,
+  ShoppingBag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMobile } from '@/hooks/use-mobile';
@@ -60,6 +63,24 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       label: 'Transactions', 
       href: '/transactions',
       active: pathname === '/transactions',
+    },
+    { 
+      icon: <Package className="h-4 w-4" />, 
+      label: 'Inventory', 
+      href: '/inventory',
+      active: pathname === '/inventory',
+    },
+    { 
+      icon: <ShoppingCart className="h-4 w-4" />, 
+      label: 'Sales', 
+      href: '/sales',
+      active: pathname === '/sales',
+    },
+    { 
+      icon: <ShoppingBag className="h-4 w-4" />, 
+      label: 'Purchase', 
+      href: '/purchase',
+      active: pathname === '/purchase',
     },
     { 
       icon: <Users className="h-4 w-4" />, 

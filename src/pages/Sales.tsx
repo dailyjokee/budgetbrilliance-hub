@@ -4,7 +4,7 @@ import { PageTransition } from '@/components/transitions/PageTransition';
 import DashboardLayout from '@/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { PlusIcon, SearchIcon, FilterIcon, ArrowDownUpIcon } from 'lucide-react';
+import { PlusIcon, SearchIcon, FilterIcon, BarChart3Icon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { InvoiceList } from '@/components/sales/InvoiceList';
 import { InvoiceForm } from '@/components/sales/InvoiceForm';
@@ -25,7 +25,7 @@ const Sales = () => {
     {
       id: '1',
       number: 'INV-001',
-      customer: 'John Doe',
+      customer: 'Acme Corp',
       date: '2023-05-15',
       amount: 1250.99,
       status: 'paid',
@@ -33,17 +33,17 @@ const Sales = () => {
     {
       id: '2',
       number: 'INV-002',
-      customer: 'Jane Smith',
+      customer: 'XYZ Ltd',
       date: '2023-05-20',
-      amount: 2500.50,
+      amount: 3500.50,
       status: 'pending',
     },
     {
       id: '3',
       number: 'INV-003',
-      customer: 'Acme Corp',
+      customer: 'ABC Inc',
       date: '2023-05-25',
-      amount: 4750.75,
+      amount: 750.75,
       status: 'overdue',
     },
   ]);
@@ -135,7 +135,7 @@ const Sales = () => {
       <PageTransition>
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <h1 className="text-2xl font-bold tracking-tight">Sales</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Sales Management</h1>
             
             <div className="flex items-center gap-2 w-full md:w-auto">
               <div className="relative flex-1 md:w-64">
@@ -144,7 +144,7 @@ const Sales = () => {
                   type="search"
                   placeholder="Search invoices..."
                   className="pl-8"
-                  value={filter.search}
+                  value={filter.search || ''}
                   onChange={handleSearch}
                 />
               </div>
@@ -154,7 +154,7 @@ const Sales = () => {
               </Button>
               
               <Button variant="outline" size="icon">
-                <ArrowDownUpIcon className="h-4 w-4" />
+                <BarChart3Icon className="h-4 w-4" />
               </Button>
               
               <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
@@ -164,7 +164,7 @@ const Sales = () => {
                     New
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[800px]">
+                <DialogContent className="sm:max-w-[600px]">
                   <DialogHeader>
                     <DialogTitle>
                       {selectedInvoice ? 'Edit Invoice' : 'Create Invoice'}
@@ -186,8 +186,8 @@ const Sales = () => {
           <Tabs defaultValue="all" value={filter.status} onValueChange={handleTabChange}>
             <TabsList className="w-full md:w-auto">
               <TabsTrigger value="all">All Invoices</TabsTrigger>
-              <TabsTrigger value="paid">Paid</TabsTrigger>
               <TabsTrigger value="pending">Pending</TabsTrigger>
+              <TabsTrigger value="paid">Paid</TabsTrigger>
               <TabsTrigger value="overdue">Overdue</TabsTrigger>
             </TabsList>
             <TabsContent value="all" className="mt-6">
@@ -198,17 +198,17 @@ const Sales = () => {
                 onDelete={handleDeleteInvoice}
               />
             </TabsContent>
-            <TabsContent value="paid" className="mt-6">
+            <TabsContent value="pending" className="mt-6">
               <InvoiceList 
-                invoices={invoices.filter(inv => inv.status === 'paid')} 
+                invoices={invoices.filter(inv => inv.status === 'pending')} 
                 isLoading={isLoading}
                 onEdit={handleEditInvoice}
                 onDelete={handleDeleteInvoice}
               />
             </TabsContent>
-            <TabsContent value="pending" className="mt-6">
+            <TabsContent value="paid" className="mt-6">
               <InvoiceList 
-                invoices={invoices.filter(inv => inv.status === 'pending')} 
+                invoices={invoices.filter(inv => inv.status === 'paid')} 
                 isLoading={isLoading}
                 onEdit={handleEditInvoice}
                 onDelete={handleDeleteInvoice}
