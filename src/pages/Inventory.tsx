@@ -37,9 +37,14 @@ const Inventory = () => {
   };
   
   const handleTabChange = (value: string) => {
+    // Fix type error by ensuring value is one of the allowed types
+    const categoryValue = value === 'all' 
+      ? 'all' 
+      : (value === 'low-stock' ? 'low-stock' : value) as 'all' | 'raw' | 'finished' | 'low-stock';
+    
     setFilter({ 
       ...filter, 
-      category: value === 'all' ? 'all' : value
+      category: categoryValue
     });
   };
   
