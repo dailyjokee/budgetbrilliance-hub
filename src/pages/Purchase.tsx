@@ -2,20 +2,9 @@
 import React, { useState } from 'react';
 import { PageTransition } from '@/components/transitions/PageTransition';
 import DashboardLayout from '@/layout/DashboardLayout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { PlusIcon, SearchIcon, FilterIcon, ArrowDownUpIcon } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { PurchaseOrderList } from '@/components/purchase/PurchaseOrderList';
-import { PurchaseOrderForm } from '@/components/purchase/PurchaseOrderForm';
-import { 
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle, 
-  DialogTrigger 
-} from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { PurchaseHeader } from '@/components/purchase/PurchaseHeader';
+import { PurchaseTabContent } from '@/components/purchase/PurchaseTabContent';
 
 const Purchase = () => {
   // This is a placeholder until we implement the full Purchase context
@@ -50,14 +39,6 @@ const Purchase = () => {
   
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedPO, setSelectedPO] = useState<any | undefined>(undefined);
-  
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ ...filter, search: e.target.value });
-  };
-  
-  const handleTabChange = (value: string) => {
-    setFilter({ ...filter, status: value });
-  };
   
   const handleCreatePO = async (data: any) => {
     setIsLoading(true);
@@ -134,95 +115,25 @@ const Purchase = () => {
     <DashboardLayout>
       <PageTransition>
         <div className="space-y-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <h1 className="text-2xl font-bold tracking-tight">Purchase Orders</h1>
-            
-            <div className="flex items-center gap-2 w-full md:w-auto">
-              <div className="relative flex-1 md:w-64">
-                <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search purchase orders..."
-                  className="pl-8"
-                  value={filter.search}
-                  onChange={handleSearch}
-                />
-              </div>
-              
-              <Button variant="outline" size="icon">
-                <FilterIcon className="h-4 w-4" />
-              </Button>
-              
-              <Button variant="outline" size="icon">
-                <ArrowDownUpIcon className="h-4 w-4" />
-              </Button>
-              
-              <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-                <DialogTrigger asChild>
-                  <Button onClick={() => setSelectedPO(undefined)}>
-                    <PlusIcon className="h-4 w-4 mr-2" />
-                    New
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[800px]">
-                  <DialogHeader>
-                    <DialogTitle>
-                      {selectedPO ? 'Edit Purchase Order' : 'Create Purchase Order'}
-                    </DialogTitle>
-                  </DialogHeader>
-                  <PurchaseOrderForm
-                    purchaseOrder={selectedPO}
-                    onSubmit={selectedPO ? handleUpdatePO : handleCreatePO}
-                    onCancel={() => {
-                      setIsFormOpen(false);
-                      setSelectedPO(undefined);
-                    }}
-                  />
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
+          <PurchaseHeader
+            filter={filter}
+            setFilter={setFilter}
+            isFormOpen={isFormOpen}
+            setIsFormOpen={setIsFormOpen}
+            selectedPO={selectedPO}
+            setSelectedPO={setSelectedPO}
+            handleCreatePO={handleCreatePO}
+            handleUpdatePO={handleUpdatePO}
+          />
           
-          <Tabs defaultValue="all" value={filter.status} onValueChange={handleTabChange}>
-            <TabsList className="w-full md:w-auto">
-              <TabsTrigger value="all">All Orders</TabsTrigger>
-              <TabsTrigger value="pending">Pending</TabsTrigger>
-              <TabsTrigger value="ordered">Ordered</TabsTrigger>
-              <TabsTrigger value="received">Received</TabsTrigger>
-            </TabsList>
-            <TabsContent value="all" className="mt-6">
-              <PurchaseOrderList 
-                purchaseOrders={purchaseOrders} 
-                isLoading={isLoading}
-                onEdit={handleEditPO}
-                onDelete={handleDeletePO}
-              />
-            </TabsContent>
-            <TabsContent value="pending" className="mt-6">
-              <PurchaseOrderList 
-                purchaseOrders={purchaseOrders.filter(po => po.status === 'pending')} 
-                isLoading={isLoading}
-                onEdit={handleEditPO}
-                onDelete={handleDeletePO}
-              />
-            </TabsContent>
-            <TabsContent value="ordered" className="mt-6">
-              <PurchaseOrderList 
-                purchaseOrders={purchaseOrders.filter(po => po.status === 'ordered')} 
-                isLoading={isLoading}
-                onEdit={handleEditPO}
-                onDelete={handleDeletePO}
-              />
-            </TabsContent>
-            <TabsContent value="received" className="mt-6">
-              <PurchaseOrderList 
-                purchaseOrders={purchaseOrders.filter(po => po.status === 'received')} 
-                isLoading={isLoading}
-                onEdit={handleEditPO}
-                onDelete={handleDeletePO}
-              />
-            </TabsContent>
-          </Tabs>
+          <PurchaseTabContent
+            filter={filter}
+            setFilter={setFilter}
+            purchaseOrders={purchaseOrders}
+            isLoading={isLoading}
+            onEdit={handleEditPO}
+            onDelete={handleDeletePO}
+          />
         </div>
       </PageTransition>
     </DashboardLayout>
