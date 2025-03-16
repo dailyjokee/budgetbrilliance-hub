@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { PageTransition } from '@/components/transitions/PageTransition';
 import DashboardLayout from '@/layout/DashboardLayout';
@@ -64,75 +63,75 @@ const Reports = () => {
   ];
   
   // Generate PDF content using a library that works on the browser
-  const generatePDFReport = (reportId: string, reportTitle: string) => {
+  const generatePDFReport = (reportId: string, reportTitle: string): string => {
     // Simulate report generation delay
     toast.loading(`Generating ${reportTitle} report...`);
+    
+    // Create a dummy PDF content
+    const dummyContent = `
+      <html>
+        <head>
+          <title>${reportTitle} Report</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 30px; }
+            h1 { color: #2563eb; }
+            .report-header { border-bottom: 1px solid #e5e7eb; padding-bottom: 20px; }
+            .report-date { color: #6b7280; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
+            th { background-color: #f3f4f6; }
+          </style>
+        </head>
+        <body>
+          <div class="report-header">
+            <h1>${reportTitle} Report</h1>
+            <p class="report-date">Period: ${periodTab === 'thisMonth' ? 'Current Month' : 
+                                     periodTab === 'lastMonth' ? 'Last Month' : 
+                                     periodTab === 'quarter' ? 'Current Quarter' : 'Current Year'}</p>
+          </div>
+          <div>
+            <p>This is a sample ${reportTitle} report generated for demonstration purposes.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2023-01-15</td>
+                  <td>Sample data entry 1</td>
+                  <td>$1,250.00</td>
+                </tr>
+                <tr>
+                  <td>2023-01-22</td>
+                  <td>Sample data entry 2</td>
+                  <td>$2,340.75</td>
+                </tr>
+                <tr>
+                  <td>2023-02-05</td>
+                  <td>Sample data entry 3</td>
+                  <td>$870.25</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </body>
+      </html>
+    `;
+    
+    // Create a Blob and download
+    const blob = new Blob([dummyContent], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
     
     setTimeout(() => {
       toast.dismiss();
       toast.success(`${reportTitle} report generated successfully`);
-      
-      // Create a dummy PDF content
-      const dummyContent = `
-        <html>
-          <head>
-            <title>${reportTitle} Report</title>
-            <style>
-              body { font-family: Arial, sans-serif; margin: 30px; }
-              h1 { color: #2563eb; }
-              .report-header { border-bottom: 1px solid #e5e7eb; padding-bottom: 20px; }
-              .report-date { color: #6b7280; }
-              table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-              th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
-              th { background-color: #f3f4f6; }
-            </style>
-          </head>
-          <body>
-            <div class="report-header">
-              <h1>${reportTitle} Report</h1>
-              <p class="report-date">Period: ${periodTab === 'thisMonth' ? 'Current Month' : 
-                                       periodTab === 'lastMonth' ? 'Last Month' : 
-                                       periodTab === 'quarter' ? 'Current Quarter' : 'Current Year'}</p>
-            </div>
-            <div>
-              <p>This is a sample ${reportTitle} report generated for demonstration purposes.</p>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>2023-01-15</td>
-                    <td>Sample data entry 1</td>
-                    <td>$1,250.00</td>
-                  </tr>
-                  <tr>
-                    <td>2023-01-22</td>
-                    <td>Sample data entry 2</td>
-                    <td>$2,340.75</td>
-                  </tr>
-                  <tr>
-                    <td>2023-02-05</td>
-                    <td>Sample data entry 3</td>
-                    <td>$870.25</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </body>
-        </html>
-      `;
-      
-      // Create a Blob and download
-      const blob = new Blob([dummyContent], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      
-      return url;
     }, 1500);
+    
+    return url;
   };
   
   const handleDownload = (reportId: string, reportTitle: string) => {
