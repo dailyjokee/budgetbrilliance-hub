@@ -9,6 +9,7 @@ import { BarChart3, FileText, Download, Printer, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { contentVariants } from '@/components/transitions/PageTransition';
 import { toast } from 'sonner';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const Reports = () => {
   const [periodTab, setPeriodTab] = useState('thisMonth');
@@ -61,6 +62,114 @@ const Reports = () => {
       icon: <Calendar className="h-8 w-8 text-primary/70" />
     },
   ];
+  
+  // Generate PDF content using a library that works on the browser
+  const generatePDFReport = (reportId: string, reportTitle: string) => {
+    // Simulate report generation delay
+    toast.loading(`Generating ${reportTitle} report...`);
+    
+    setTimeout(() => {
+      toast.dismiss();
+      toast.success(`${reportTitle} report generated successfully`);
+      
+      // Create a dummy PDF content
+      const dummyContent = `
+        <html>
+          <head>
+            <title>${reportTitle} Report</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 30px; }
+              h1 { color: #2563eb; }
+              .report-header { border-bottom: 1px solid #e5e7eb; padding-bottom: 20px; }
+              .report-date { color: #6b7280; }
+              table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+              th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
+              th { background-color: #f3f4f6; }
+            </style>
+          </head>
+          <body>
+            <div class="report-header">
+              <h1>${reportTitle} Report</h1>
+              <p class="report-date">Period: ${periodTab === 'thisMonth' ? 'Current Month' : 
+                                       periodTab === 'lastMonth' ? 'Last Month' : 
+                                       periodTab === 'quarter' ? 'Current Quarter' : 'Current Year'}</p>
+            </div>
+            <div>
+              <p>This is a sample ${reportTitle} report generated for demonstration purposes.</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2023-01-15</td>
+                    <td>Sample data entry 1</td>
+                    <td>$1,250.00</td>
+                  </tr>
+                  <tr>
+                    <td>2023-01-22</td>
+                    <td>Sample data entry 2</td>
+                    <td>$2,340.75</td>
+                  </tr>
+                  <tr>
+                    <td>2023-02-05</td>
+                    <td>Sample data entry 3</td>
+                    <td>$870.25</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </body>
+        </html>
+      `;
+      
+      // Create a Blob and download
+      const blob = new Blob([dummyContent], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      
+      return url;
+    }, 1500);
+  };
+  
+  const handleDownload = (reportId: string, reportTitle: string) => {
+    const url = generatePDFReport(reportId, reportTitle);
+    
+    setTimeout(() => {
+      // Create an anchor element to download the file
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${reportId}-report.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 1600);
+  };
+  
+  const handlePrint = (reportId: string, reportTitle: string) => {
+    const url = generatePDFReport(reportId, reportTitle);
+    
+    setTimeout(() => {
+      // Open in a new window and print
+      const printWindow = window.open(url, '_blank');
+      
+      if (printWindow) {
+        printWindow.onload = function() {
+          printWindow.print();
+        };
+      } else {
+        toast.error('Please allow popups to print reports');
+      }
+    }, 1600);
+  };
+  
+  const handleViewReport = (reportId: string, reportTitle: string) => {
+    toast.info(`Viewing ${reportTitle} report`);
+  };
   
   return (
     <DashboardLayout>
@@ -116,7 +225,7 @@ const Reports = () => {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        onClick={() => toast.info(`View ${report.title} report`)}
+                        onClick={() => handleViewReport(report.id, report.title)}
                       >
                         View
                       </Button>
@@ -124,14 +233,14 @@ const Reports = () => {
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          onClick={() => toast.info(`Download ${report.title} report`)}
+                          onClick={() => handleDownload(report.id, report.title)}
                         >
                           <Download className="h-4 w-4" />
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          onClick={() => toast.info(`Print ${report.title} report`)}
+                          onClick={() => handlePrint(report.id, report.title)}
                         >
                           <Printer className="h-4 w-4" />
                         </Button>

@@ -12,10 +12,11 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle, 
-  DialogTrigger 
+  DialogTitle,
+  DialogDescription
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const Sales = () => {
   // This is a placeholder until we implement the full Sales context
@@ -164,20 +165,27 @@ const Sales = () => {
                     New
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[600px]">
+                <DialogContent className="sm:max-w-[600px] max-h-[90vh]">
                   <DialogHeader>
                     <DialogTitle>
                       {selectedInvoice ? 'Edit Invoice' : 'Create Invoice'}
                     </DialogTitle>
+                    <DialogDescription>
+                      Fill in the details to {selectedInvoice ? 'update' : 'create'} an invoice
+                    </DialogDescription>
                   </DialogHeader>
-                  <InvoiceForm
-                    invoice={selectedInvoice}
-                    onSubmit={selectedInvoice ? handleUpdateInvoice : handleCreateInvoice}
-                    onCancel={() => {
-                      setIsFormOpen(false);
-                      setSelectedInvoice(undefined);
-                    }}
-                  />
+                  <ScrollArea className="max-h-[calc(90vh-120px)] pr-4">
+                    <div className="pr-3">
+                      <InvoiceForm
+                        invoice={selectedInvoice}
+                        onSubmit={selectedInvoice ? handleUpdateInvoice : handleCreateInvoice}
+                        onCancel={() => {
+                          setIsFormOpen(false);
+                          setSelectedInvoice(undefined);
+                        }}
+                      />
+                    </div>
+                  </ScrollArea>
                 </DialogContent>
               </Dialog>
             </div>

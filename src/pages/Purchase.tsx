@@ -5,6 +5,15 @@ import DashboardLayout from '@/layout/DashboardLayout';
 import { toast } from 'sonner';
 import { PurchaseHeader } from '@/components/purchase/PurchaseHeader';
 import { PurchaseTabContent } from '@/components/purchase/PurchaseTabContent';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle,
+  DialogDescription
+} from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { PurchaseOrderForm } from '@/components/purchase/PurchaseOrderForm';
 
 const Purchase = () => {
   // This is a placeholder until we implement the full Purchase context
@@ -115,6 +124,10 @@ const Purchase = () => {
     <DashboardLayout>
       <PageTransition>
         <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold tracking-tight">Purchase Orders</h1>
+          </div>
+          
           <PurchaseHeader
             filter={filter}
             setFilter={setFilter}
@@ -134,6 +147,31 @@ const Purchase = () => {
             onEdit={handleEditPO}
             onDelete={handleDeletePO}
           />
+          
+          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+            <DialogContent className="sm:max-w-[700px] max-h-[90vh]">
+              <DialogHeader>
+                <DialogTitle>
+                  {selectedPO ? 'Edit Purchase Order' : 'Create Purchase Order'}
+                </DialogTitle>
+                <DialogDescription>
+                  Fill in the details to {selectedPO ? 'update' : 'create'} a purchase order
+                </DialogDescription>
+              </DialogHeader>
+              <ScrollArea className="max-h-[calc(90vh-120px)] pr-4">
+                <div className="pr-3">
+                  <PurchaseOrderForm
+                    purchaseOrder={selectedPO}
+                    onSubmit={selectedPO ? handleUpdatePO : handleCreatePO}
+                    onCancel={() => {
+                      setIsFormOpen(false);
+                      setSelectedPO(undefined);
+                    }}
+                  />
+                </div>
+              </ScrollArea>
+            </DialogContent>
+          </Dialog>
         </div>
       </PageTransition>
     </DashboardLayout>
