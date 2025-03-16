@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -22,6 +22,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { PlusIcon, Trash2Icon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { Card, CardContent } from '@/components/ui/card';
 
 // Mock customers for demo
 const mockCustomers = [
@@ -181,96 +182,98 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, onSubmit, onC
           </div>
 
           {watchItems.map((_, index) => (
-            <div key={index} className="border p-4 rounded-md space-y-4">
-              <div className="flex justify-between items-start">
-                <h4 className="font-medium">Item {index + 1}</h4>
-                {watchItems.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeItem(index)}
-                  >
-                    <Trash2Icon className="h-4 w-4 text-destructive" />
-                  </Button>
-                )}
-              </div>
+            <Card key={index} className="shadow-sm">
+              <CardContent className="p-4 space-y-4">
+                <div className="flex justify-between items-start">
+                  <h4 className="font-medium">Item {index + 1}</h4>
+                  {watchItems.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeItem(index)}
+                    >
+                      <Trash2Icon className="h-4 w-4 text-destructive" />
+                    </Button>
+                  )}
+                </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name={`items.${index}.product`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Product</FormLabel>
-                      <Select 
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          handleProductSelect(value, index);
-                        }} 
-                        defaultValue={field.value}
-                      >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.product`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product</FormLabel>
+                        <Select 
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            handleProductSelect(value, index);
+                          }} 
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select product" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {mockProducts.map(product => (
+                              <SelectItem key={product.id} value={product.id}>
+                                {product.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.description`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description (Optional)</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select product" />
-                          </SelectTrigger>
+                          <Input placeholder="Item description" {...field} />
                         </FormControl>
-                        <SelectContent>
-                          {mockProducts.map(product => (
-                            <SelectItem key={product.id} value={product.id}>
-                              {product.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name={`items.${index}.description`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Item description" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.quantity`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Quantity</FormLabel>
+                        <FormControl>
+                          <Input type="number" min={1} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name={`items.${index}.quantity`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Quantity</FormLabel>
-                      <FormControl>
-                        <Input type="number" min={1} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name={`items.${index}.price`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Price</FormLabel>
-                      <FormControl>
-                        <Input type="number" step="0.01" min={0} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.price`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Price</FormLabel>
+                        <FormControl>
+                          <Input type="number" step="0.01" min={0} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
 
@@ -290,20 +293,23 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, onSubmit, onC
 
         <Separator />
 
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Subtotal:</span>
-            <span>{formatCurrency(subtotal)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Tax (10%):</span>
-            <span>{formatCurrency(tax)}</span>
-          </div>
-          <div className="flex justify-between font-medium text-lg">
-            <span>Total:</span>
-            <span>{formatCurrency(total)}</span>
-          </div>
-        </div>
+        <Card className="shadow-sm">
+          <CardContent className="p-4 space-y-2">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Subtotal:</span>
+              <span>{formatCurrency(subtotal)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Tax (10%):</span>
+              <span>{formatCurrency(tax)}</span>
+            </div>
+            <Separator className="my-2" />
+            <div className="flex justify-between font-medium text-lg">
+              <span>Total:</span>
+              <span>{formatCurrency(total)}</span>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="flex justify-end gap-3">
           <Button type="button" variant="outline" onClick={onCancel}>

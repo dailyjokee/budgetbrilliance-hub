@@ -17,6 +17,7 @@ import Purchase from "./pages/Purchase";
 import Sales from "./pages/Sales";
 import { TransactionProvider } from "./context/TransactionContext";
 import { ContactProvider } from "./context/ContactContext";
+import { InventoryProvider } from "./context/InventoryContext";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -27,23 +28,25 @@ const App = () => (
       <TooltipProvider>
         <TransactionProvider>
           <ContactProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/transactions" element={<Transactions />} />
-                <Route path="/inventory" element={<Inventory />} />
-                <Route path="/sales" element={<Sales />} />
-                <Route path="/purchase" element={<Purchase />} />
-                <Route path="/contacts" element={<Contacts />} />
-                <Route path="/reports" element={<Reports />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
+            <InventoryProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/transactions" element={<Transactions />} />
+                  <Route path="/inventory" element={<Inventory />} />
+                  <Route path="/sales" element={<Sales />} />
+                  <Route path="/purchase" element={<Purchase />} />
+                  <Route path="/contacts" element={<Contacts />} />
+                  <Route path="/reports" element={<Reports />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </InventoryProvider>
           </ContactProvider>
         </TransactionProvider>
       </TooltipProvider>
