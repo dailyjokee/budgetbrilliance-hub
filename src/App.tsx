@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import Inventory from "./pages/Inventory";
 import Purchase from "./pages/Purchase";
 import Sales from "./pages/Sales";
+import Reports from "./pages/Reports";
 import { TransactionProvider } from "./context/TransactionContext";
 import { ContactProvider } from "./context/ContactContext";
 import { InventoryProvider } from "./context/InventoryContext";
@@ -40,6 +41,7 @@ const App = () => (
                   <Route path="/sales" element={<Sales />} />
                   <Route path="/purchase" element={<Purchase />} />
                   <Route path="/contacts" element={<Contacts />} />
+                  <Route path="/reports" element={<Reports />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

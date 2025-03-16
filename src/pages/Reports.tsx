@@ -1,14 +1,14 @@
+
 import React, { useState } from 'react';
 import { PageTransition } from '@/components/transitions/PageTransition';
 import DashboardLayout from '@/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, FileText, Download, Printer, Calendar } from 'lucide-react';
+import { BarChart3, FileText, Download, Printer, Calendar, FileSpreadsheet, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { contentVariants } from '@/components/transitions/PageTransition';
 import { toast } from 'sonner';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 const Reports = () => {
   const [periodTab, setPeriodTab] = useState('thisMonth');
@@ -62,12 +62,12 @@ const Reports = () => {
     },
   ];
   
-  // Generate PDF content using a library that works on the browser
+  // Generate PDF content
   const generatePDFReport = (reportId: string, reportTitle: string): string => {
     // Simulate report generation delay
     toast.loading(`Generating ${reportTitle} report...`);
     
-    // Create a dummy PDF content
+    // Create PDF content
     const dummyContent = `
       <html>
         <head>
@@ -134,7 +134,36 @@ const Reports = () => {
     return url;
   };
   
-  const handleDownload = (reportId: string, reportTitle: string) => {
+  // Generate Excel file
+  const generateExcelReport = (reportId: string, reportTitle: string): string => {
+    toast.loading(`Generating ${reportTitle} Excel report...`);
+    
+    // Create a simple CSV string as Excel content
+    const headers = ['Date', 'Description', 'Amount'];
+    const rows = [
+      ['2023-01-15', 'Sample data entry 1', '$1,250.00'],
+      ['2023-01-22', 'Sample data entry 2', '$2,340.75'],
+      ['2023-02-05', 'Sample data entry 3', '$870.25'],
+    ];
+    
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+    
+    // Create a Blob and get URL
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    
+    setTimeout(() => {
+      toast.dismiss();
+      toast.success(`${reportTitle} Excel report generated successfully`);
+    }, 1500);
+    
+    return url;
+  };
+  
+  const handleDownloadPDF = (reportId: string, reportTitle: string) => {
     const url = generatePDFReport(reportId, reportTitle);
     
     setTimeout(() => {
@@ -142,6 +171,21 @@ const Reports = () => {
       const a = document.createElement('a');
       a.href = url;
       a.download = `${reportId}-report.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 1600);
+  };
+  
+  const handleDownloadExcel = (reportId: string, reportTitle: string) => {
+    const url = generateExcelReport(reportId, reportTitle);
+    
+    setTimeout(() => {
+      // Create an anchor element to download the file
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${reportId}-report.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -167,7 +211,11 @@ const Reports = () => {
   };
   
   const handleViewReport = (reportId: string, reportTitle: string) => {
-    toast.info(`Viewing ${reportTitle} report`);
+    const url = generatePDFReport(reportId, reportTitle);
+    
+    setTimeout(() => {
+      window.open(url, '_blank');
+    }, 1600);
   };
   
   return (
@@ -220,29 +268,42 @@ const Reports = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex justify-between">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => handleViewReport(report.id, report.title)}
-                      >
-                        View
-                      </Button>
-                      <div className="flex gap-2">
+                    <div className="flex flex-col gap-3">
+                      <div className="flex justify-between">
                         <Button 
-                          variant="ghost" 
+                          variant="outline" 
                           size="sm" 
-                          onClick={() => handleDownload(report.id, report.title)}
+                          onClick={() => handleViewReport(report.id, report.title)}
                         >
-                          <Download className="h-4 w-4" />
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
                         </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={() => handlePrint(report.id, report.title)}
-                        >
-                          <Printer className="h-4 w-4" />
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => handleDownloadExcel(report.id, report.title)}
+                          >
+                            <FileSpreadsheet className="h-4 w-4 mr-1" />
+                            Excel
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => handleDownloadPDF(report.id, report.title)}
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            PDF
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => handlePrint(report.id, report.title)}
+                          >
+                            <Printer className="h-4 w-4 mr-1" />
+                            Print
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </CardContent>

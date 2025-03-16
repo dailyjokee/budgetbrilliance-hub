@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -11,7 +12,8 @@ import {
   X,
   Package,
   ShoppingCart,
-  ShoppingBag
+  ShoppingBag,
+  BarChart3
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMobile } from '@/hooks/use-mobile';
@@ -85,6 +87,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       label: 'Contacts', 
       href: '/contacts',
       active: pathname === '/contacts',
+    },
+    { 
+      icon: <BarChart3 className="h-4 w-4" />, 
+      label: 'Reports', 
+      href: '/reports',
+      active: pathname === '/reports',
     },
   ];
   
