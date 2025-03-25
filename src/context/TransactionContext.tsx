@@ -1,123 +1,159 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Transaction, transactionService } from '@/services/transactionService';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from 'sonner';
+import { Transaction, TransactionType, TransactionStatus, getTransactions, createTransaction as apiCreateTransaction, updateTransaction as apiUpdateTransaction, deleteTransaction as apiDeleteTransaction } from '../services/transactionService';
 
+// Filter type
+interface TransactionFilter {
+  type: 'all' | TransactionType;
+  search: string;
+  status: 'all' | TransactionStatus;
+}
+
+// Context type
 interface TransactionContextType {
   transactions: Transaction[];
   isLoading: boolean;
   error: Error | null;
-  filter: {
-    type: 'all' | 'income' | 'expense';
-    search: string;
-    status: 'all' | 'completed' | 'pending' | 'failed';
-  };
-  setFilter: (filter: Partial<TransactionContextType['filter']>) => void;
+  filter: TransactionFilter;
+  setFilter: (filter: Partial<TransactionFilter>) => void;
   refreshTransactions: () => Promise<void>;
-  createTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<Transaction>;
-  updateTransaction: (transaction: Transaction) => Promise<Transaction>;
-  deleteTransaction: (id: string) => Promise<boolean>;
+  createTransaction: (transaction: Omit<Transaction, "id">) => Promise<void>;
+  updateTransaction: (transaction: Transaction) => Promise<void>;
+  deleteTransaction: (id: string) => Promise<void>;
 }
 
+// Create context
 const TransactionContext = createContext<TransactionContextType | undefined>(undefined);
 
-export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// Provider component
+export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
-  const [filter, setFilterState] = useState({
-    type: 'all' as const,
+  const [filter, setFilter] = useState<TransactionFilter>({
+    type: 'all',
     search: '',
-    status: 'all' as const
+    status: 'all'
   });
 
-  const loadTransactions = async () => {
+  const refreshTransactions = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const filteredTransactions = await transactionService.filterTransactions({
-        type: filter.type === 'all' ? undefined : filter.type,
-        search: filter.search || undefined,
-        status: filter.status === 'all' ? undefined : filter.status
-      });
-      setTransactions(filteredTransactions);
+      const data = await getTransactions();
+      setTransactions(data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load transactions'));
+      setError(err instanceof Error ? err : new Error('An error occurred'));
       toast.error('Failed to load transactions');
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    loadTransactions();
-  }, [filter]);
-
-  const setFilter = (newFilter: Partial<typeof filter>) => {
-    setFilterState(prev => ({ ...prev, ...newFilter }));
+  const updateFilteredTransactions = () => {
+    let result = [...transactions];
+    
+    // Filter by type
+    if (filter.type !== 'all') {
+      result = result.filter(t => t.type === filter.type);
+    }
+    
+    // Filter by status
+    if (filter.status !== 'all') {
+      result = result.filter(t => t.status === filter.status);
+    }
+    
+    // Filter by search term
+    if (filter.search) {
+      const searchTerm = filter.search.toLowerCase();
+      result = result.filter(t => 
+        t.name.toLowerCase().includes(searchTerm) ||
+        t.category.toLowerCase().includes(searchTerm) ||
+        t.reference.toLowerCase().includes(searchTerm) ||
+        (t.description && t.description.toLowerCase().includes(searchTerm))
+      );
+    }
+    
+    setFilteredTransactions(result);
   };
 
-  const refreshTransactions = async () => {
-    await loadTransactions();
+  const handleSetFilter = (newFilter: Partial<TransactionFilter>) => {
+    setFilter(prev => ({ ...prev, ...newFilter }));
   };
 
-  const createTransaction = async (transaction: Omit<Transaction, 'id'>) => {
+  const createTransaction = async (transaction: Omit<Transaction, "id">) => {
+    setIsLoading(true);
     try {
-      const newTransaction = await transactionService.createTransaction(transaction);
-      await refreshTransactions();
-      return newTransaction;
+      const newTransaction = await apiCreateTransaction(transaction);
+      setTransactions(prev => [newTransaction, ...prev]);
+      toast.success('Transaction created successfully');
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to create transaction'));
+      setError(err instanceof Error ? err : new Error('An error occurred'));
       toast.error('Failed to create transaction');
       throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const updateTransaction = async (transaction: Transaction) => {
+    setIsLoading(true);
     try {
-      const updatedTransaction = await transactionService.updateTransaction(transaction);
-      await refreshTransactions();
-      return updatedTransaction;
+      const updatedTransaction = await apiUpdateTransaction(transaction);
+      setTransactions(prev => prev.map(t => t.id === updatedTransaction.id ? updatedTransaction : t));
+      toast.success('Transaction updated successfully');
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to update transaction'));
+      setError(err instanceof Error ? err : new Error('An error occurred'));
       toast.error('Failed to update transaction');
       throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const deleteTransaction = async (id: string) => {
+    setIsLoading(true);
     try {
-      const success = await transactionService.deleteTransaction(id);
-      if (success) {
-        await refreshTransactions();
-      }
-      return success;
+      await apiDeleteTransaction(id);
+      setTransactions(prev => prev.filter(t => t.id !== id));
+      toast.success('Transaction deleted successfully');
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to delete transaction'));
+      setError(err instanceof Error ? err : new Error('An error occurred'));
       toast.error('Failed to delete transaction');
       throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const contextValue = {
-    transactions,
+  // Load initial data
+  useEffect(() => {
+    refreshTransactions();
+  }, []);
+
+  // Update filtered transactions when filters or transactions change
+  useEffect(() => {
+    updateFilteredTransactions();
+  }, [filter, transactions]);
+
+  const value = {
+    transactions: filteredTransactions,
     isLoading,
     error,
     filter,
-    setFilter,
+    setFilter: handleSetFilter,
     refreshTransactions,
     createTransaction,
     updateTransaction,
     deleteTransaction
   };
 
-  return (
-    <TransactionContext.Provider value={contextValue}>
-      {children}
-    </TransactionContext.Provider>
-  );
+  return <TransactionContext.Provider value={value}>{children}</TransactionContext.Provider>;
 };
 
+// Hook for using the context
 export const useTransactions = () => {
   const context = useContext(TransactionContext);
   if (context === undefined) {
