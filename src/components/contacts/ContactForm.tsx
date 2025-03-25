@@ -3,7 +3,7 @@ import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -11,18 +11,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Contact } from '@/services/contactService';
+} from '../ui/form';
+import { Input } from '../ui/input';
+import { Contact } from '../../services/contactService';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
+} from '../ui/select';
+import { Textarea } from '../ui/textarea';
+import { ScrollArea } from '../ui/scroll-area';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
@@ -69,7 +69,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               <FormField
                 control={form.control}
                 name="name"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
@@ -83,7 +83,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               <FormField
                 control={form.control}
                 name="type"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Type</FormLabel>
                     <Select 
@@ -108,7 +108,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               <FormField
                 control={form.control}
                 name="email"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
@@ -122,7 +122,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               <FormField
                 control={form.control}
                 name="phone"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Phone</FormLabel>
                     <FormControl>
@@ -136,7 +136,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               <FormField
                 control={form.control}
                 name="company"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Company (Optional)</FormLabel>
                     <FormControl>
@@ -150,7 +150,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               <FormField
                 control={form.control}
                 name="status"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
                     <Select 
@@ -176,7 +176,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
             <FormField
               control={form.control}
               name="address"
-              render={({ field }) => (
+              render={({ field }: { field: any }) => (
                 <FormItem>
                   <FormLabel>Address</FormLabel>
                   <FormControl>

@@ -3,7 +3,7 @@ import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -11,18 +11,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Product } from '@/services/inventoryService';
+} from '../ui/form';
+import { Input } from '../ui/input';
+import { Product } from '../../services/inventoryService';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
+} from '../ui/select';
+import { Textarea } from '../ui/textarea';
+import { ScrollArea } from '../ui/scroll-area';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
@@ -75,7 +75,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="name"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Product Name</FormLabel>
                     <FormControl>
@@ -89,7 +89,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="sku"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>SKU</FormLabel>
                     <FormControl>
@@ -103,7 +103,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="category"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Category</FormLabel>
                     <Select 
@@ -130,7 +130,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="status"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
                     <Select 
@@ -155,7 +155,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="quantity"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Quantity</FormLabel>
                     <FormControl>
@@ -169,7 +169,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="unit"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Unit</FormLabel>
                     <FormControl>
@@ -183,7 +183,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="cost"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Cost Price</FormLabel>
                     <FormControl>
@@ -197,7 +197,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="price"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Selling Price</FormLabel>
                     <FormControl>
@@ -211,7 +211,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormField
                 control={form.control}
                 name="reorderLevel"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Reorder Level</FormLabel>
                     <FormControl>
@@ -226,7 +226,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             <FormField
               control={form.control}
               name="description"
-              render={({ field }) => (
+              render={({ field }: { field: any }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
