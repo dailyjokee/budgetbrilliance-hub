@@ -22,5 +22,6 @@ export function useToast() {
         });
       }
     },
+    toasts: [], // Add this to fix the build error
   };
 }
