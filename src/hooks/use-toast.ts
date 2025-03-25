@@ -22,6 +22,6 @@ export function useToast() {
         });
       }
     },
-    toasts: [], // Add this to fix the build error
+    toasts: [], // This property is needed for the toaster component
   };
 }
