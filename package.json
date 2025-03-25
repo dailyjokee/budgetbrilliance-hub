@@ -71,4 +71,7 @@
     "typescript": "^5"
   }
 }
-"build:dev": "vite build --mode development"
+"scripts": {
+  "build:dev": "vite build --mode development"
+}
+
