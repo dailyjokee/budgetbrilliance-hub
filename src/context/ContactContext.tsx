@@ -1,100 +1,83 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { 
+  Contact, 
+  ContactType, 
+  getContacts, 
+  createContact as createContactService,
+  updateContact as updateContactService,
+  deleteContact as deleteContactService
+} from '@/services/contactService';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-// Define Contact type
-export interface Contact {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  type: 'customer' | 'supplier';
-  status: 'active' | 'inactive';
-  address?: string;
-  notes?: string;
-  company?: string;
-}
-
-// Define context type
 interface ContactContextType {
   contacts: Contact[];
   isLoading: boolean;
-  error: Error | null;
-  createContact: (contact: Omit<Contact, 'id'>) => Promise<void>;
-  updateContact: (contact: Contact) => Promise<void>;
+  filter: {
+    type?: 'all' | ContactType;
+    search?: string;
+  };
+  setFilter: (filter: { type?: 'all' | ContactType; search?: string }) => void;
+  createContact: (contact: Omit<Contact, 'id'>) => Promise<Contact>;
+  updateContact: (contact: Contact) => Promise<Contact>;
   deleteContact: (id: string) => Promise<void>;
 }
 
-// Create the context
-const ContactContext = createContext<ContactContextType>({
-  contacts: [],
-  isLoading: false,
-  error: null,
-  createContact: async () => {},
-  updateContact: async () => {},
-  deleteContact: async () => {},
-});
+const ContactContext = createContext<ContactContextType | undefined>(undefined);
 
-// Create a provider component
-export const ContactProvider = ({ children }: { children: ReactNode }) => {
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    // Mock data for demonstration
-    const mockContacts: Contact[] = [
-      {
-        id: '1',
-        name: 'John Doe',
-        email: 'john@example.com',
-        phone: '123-456-7890',
-        type: 'customer',
-        status: 'active',
-        company: 'ABC Corp'
-      },
-      {
-        id: '2',
-        name: 'Jane Smith',
-        email: 'jane@example.com',
-        phone: '098-765-4321',
-        type: 'supplier',
-        status: 'active',
-        company: 'XYZ Supplies'
-      }
-    ];
-    
-    setContacts(mockContacts);
-    setIsLoading(false);
-  }, []);
-
-  // CRUD operations
-  const createContact = async (contact: Omit<Contact, 'id'>): Promise<void> => {
-    const newContact = {
-      ...contact,
-      id: Math.random().toString(36).substr(2, 9), // Generate a random ID
-    };
-    
-    setContacts([...contacts, newContact]);
+export const ContactProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [filter, setFilter] = useState<{ type?: 'all' | ContactType; search?: string }>({
+    type: 'all',
+    search: '',
+  });
+  
+  const queryClient = useQueryClient();
+  
+  const { data: contacts = [], isLoading } = useQuery({
+    queryKey: ['contacts', filter],
+    queryFn: () => getContacts(filter),
+  });
+  
+  const createMutation = useMutation({
+    mutationFn: createContactService,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    },
+  });
+  
+  const updateMutation = useMutation({
+    mutationFn: updateContactService,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    },
+  });
+  
+  const deleteMutation = useMutation({
+    mutationFn: deleteContactService,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    },
+  });
+  
+  const createContact = async (contact: Omit<Contact, 'id'>) => {
+    return createMutation.mutateAsync(contact);
   };
-
-  const updateContact = async (updatedContact: Contact): Promise<void> => {
-    setContacts(
-      contacts.map((contact) => 
-        contact.id === updatedContact.id ? updatedContact : contact
-      )
-    );
+  
+  const updateContact = async (contact: Contact) => {
+    return updateMutation.mutateAsync(contact);
   };
-
-  const deleteContact = async (id: string): Promise<void> => {
-    setContacts(contacts.filter((contact) => contact.id !== id));
+  
+  const deleteContact = async (id: string) => {
+    return deleteMutation.mutateAsync(id);
   };
-
+  
   return (
     <ContactContext.Provider
       value={{
         contacts,
         isLoading,
-        error,
+        filter,
+        setFilter,
         createContact,
         updateContact,
         deleteContact,
@@ -105,13 +88,10 @@ export const ContactProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Create a hook for using the contact context
 export const useContacts = () => {
   const context = useContext(ContactContext);
-  
   if (context === undefined) {
     throw new Error('useContacts must be used within a ContactProvider');
   }
-  
   return context;
 };

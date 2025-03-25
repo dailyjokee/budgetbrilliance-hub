@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,14 +15,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Calendar as CalendarComponent } from '../ui/calendar';
-import { Transaction } from '../../services/transactionService';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import { Transaction } from '@/services/transactionService';
 
 // Form schema
 const formSchema = z.object({
@@ -82,7 +82,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
         <FormField
           control={form.control}
           name="type"
-          render={({ field }: { field: any }) => (
+          render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>Transaction Type</FormLabel>
               <FormControl>
@@ -114,7 +114,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="name"
-            render={({ field }: { field: any }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
@@ -128,7 +128,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="amount"
-            render={({ field }: { field: any }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
@@ -145,7 +145,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="category"
-            render={({ field }: { field: any }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -170,7 +170,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="date"
-            render={({ field }: { field: any }) => (
+            render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Date</FormLabel>
                 <Popover>
@@ -202,7 +202,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="paymentMethod"
-            render={({ field }: { field: any }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Payment Method</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -227,7 +227,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="reference"
-            render={({ field }: { field: any }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Reference (Optional)</FormLabel>
                 <FormControl>
@@ -242,7 +242,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
         <FormField
           control={form.control}
           name="description"
-          render={({ field }: { field: any }) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Description (Optional)</FormLabel>
               <FormControl>

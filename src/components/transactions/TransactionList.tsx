@@ -2,12 +2,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDownLeftIcon, ArrowUpRightIcon, SearchIcon } from 'lucide-react';
-import { Transaction } from '../../services/transactionService';
-import { Button } from '../ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
+import { Transaction } from '@/services/transactionService';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { TransactionDetails } from './TransactionDetails';
-import { contentVariants } from '../transitions/PageTransition';
-import { cn } from '../../lib/utils';
+import { contentVariants } from '@/components/transitions/PageTransition';
+import { cn } from '@/lib/utils';
 
 interface TransactionListProps {
   transactions: Transaction[];
