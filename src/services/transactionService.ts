@@ -1,203 +1,249 @@
 
-import { toast } from "sonner";
+export type TransactionType = 'income' | 'expense';
+export type TransactionStatus = 'completed' | 'pending' | 'failed';
 
 export interface Transaction {
   id: string;
-  type: 'income' | 'expense';
-  name: string;
-  description?: string;
-  category: string;
+  type: TransactionType;
   amount: number;
+  description: string;
+  category: string;
   date: string;
-  status: 'completed' | 'pending' | 'failed';
   paymentMethod: string;
-  reference: string;
+  status: TransactionStatus;
+  reference?: string;
+  notes?: string;
 }
 
-// Mock transaction data
+// Mock data
 const mockTransactions: Transaction[] = [
   {
-    id: 'tr1',
+    id: '1',
     type: 'income',
-    name: 'Client Payment - ABC Corp',
-    category: 'Services',
-    amount: 2500,
-    date: '2023-04-14',
-    status: 'completed',
-    paymentMethod: 'Bank Transfer',
-    reference: 'INV-001'
-  },
-  {
-    id: 'tr2',
-    type: 'expense',
-    name: 'Office Supplies',
-    category: 'Operations',
-    amount: 149.99,
-    date: '2023-04-13',
-    status: 'completed',
-    paymentMethod: 'Credit Card',
-    reference: 'PO-113'
-  },
-  {
-    id: 'tr3',
-    type: 'expense',
-    name: 'Cloud Services - AWS',
-    category: 'Software',
-    amount: 79.99,
-    date: '2023-04-10',
-    status: 'pending',
-    paymentMethod: 'Credit Card',
-    reference: 'AWS-Apr'
-  },
-  {
-    id: 'tr4',
-    type: 'income',
-    name: 'Consulting Services - XYZ Inc',
-    category: 'Services',
-    amount: 1200,
-    date: '2023-04-08',
-    status: 'completed',
-    paymentMethod: 'Bank Transfer',
-    reference: 'INV-002'
-  },
-  {
-    id: 'tr5',
-    type: 'expense',
-    name: 'Marketing Campaign',
-    category: 'Advertising',
-    amount: 350,
-    date: '2023-04-05',
-    status: 'failed',
-    paymentMethod: 'Credit Card',
-    reference: 'MKT-Q2'
-  },
-  {
-    id: 'tr6',
-    type: 'income',
-    name: 'Product Sales',
+    amount: 5000,
+    description: 'Invoice payment',
     category: 'Sales',
-    amount: 750,
-    date: '2023-04-03',
-    status: 'completed',
-    paymentMethod: 'Cash',
-    reference: 'SALE-0425'
-  },
-  {
-    id: 'tr7',
-    type: 'expense',
-    name: 'Rent Payment',
-    category: 'Rent',
-    amount: 1800,
-    date: '2023-04-01',
-    status: 'completed',
+    date: '2023-05-05',
     paymentMethod: 'Bank Transfer',
-    reference: 'RENT-APR'
+    status: 'completed',
+    reference: 'INV-2023-001'
   },
   {
-    id: 'tr8',
+    id: '2',
     type: 'expense',
-    name: 'Utilities - Electricity',
-    category: 'Utilities',
-    amount: 120.50,
-    date: '2023-03-28',
+    amount: 1200,
+    description: 'Office rent',
+    category: 'Rent',
+    date: '2023-05-01',
+    paymentMethod: 'Bank Transfer',
     status: 'completed',
-    paymentMethod: 'Direct Debit',
-    reference: 'UTIL-E-MAR'
+  },
+  {
+    id: '3',
+    type: 'expense',
+    amount: 350,
+    description: 'Office supplies',
+    category: 'Supplies',
+    date: '2023-05-03',
+    paymentMethod: 'Credit Card',
+    status: 'completed',
+  },
+  {
+    id: '4',
+    type: 'income',
+    amount: 3500,
+    description: 'Consulting services',
+    category: 'Services',
+    date: '2023-05-10',
+    paymentMethod: 'Bank Transfer',
+    status: 'pending',
+    reference: 'SRV-2023-042'
   },
 ];
 
-export const transactionService = {
-  // Get all transactions
-  getTransactions: (): Promise<Transaction[]> => {
-    return new Promise((resolve) => {
-      // Simulate API delay
-      setTimeout(() => {
-        resolve(mockTransactions);
-      }, 500);
-    });
-  },
-
-  // Get transaction by ID
-  getTransactionById: (id: string): Promise<Transaction | undefined> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const transaction = mockTransactions.find(t => t.id === id);
-        resolve(transaction);
-      }, 300);
-    });
-  },
-
-  // Filter transactions
-  filterTransactions: (
-    filter: {
-      type?: 'income' | 'expense' | 'all';
-      search?: string;
-      category?: string;
-      status?: 'completed' | 'pending' | 'failed' | 'all';
-    }
-  ): Promise<Transaction[]> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let filtered = [...mockTransactions];
-        
-        if (filter.type && filter.type !== 'all') {
-          filtered = filtered.filter(t => t.type === filter.type);
-        }
-        
-        if (filter.search) {
-          const searchLower = filter.search.toLowerCase();
-          filtered = filtered.filter(t => 
-            t.name.toLowerCase().includes(searchLower) ||
-            t.category.toLowerCase().includes(searchLower) ||
-            t.reference.toLowerCase().includes(searchLower)
-          );
-        }
-        
-        if (filter.category) {
-          filtered = filtered.filter(t => t.category === filter.category);
-        }
-        
-        if (filter.status && filter.status !== 'all') {
-          filtered = filtered.filter(t => t.status === filter.status);
-        }
-        
-        resolve(filtered);
-      }, 500);
-    });
-  },
-
-  // Create new transaction
-  createTransaction: (transaction: Omit<Transaction, 'id'>): Promise<Transaction> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const newTransaction = {
-          ...transaction,
-          id: `tr${Date.now()}`
-        };
-        
-        toast.success('Transaction created successfully');
-        resolve(newTransaction);
-      }, 800);
-    });
-  },
-
-  // Update transaction
-  updateTransaction: (transaction: Transaction): Promise<Transaction> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        toast.success('Transaction updated successfully');
-        resolve(transaction);
-      }, 800);
-    });
-  },
-
-  // Delete transaction
-  deleteTransaction: (id: string): Promise<boolean> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        toast.success('Transaction deleted successfully');
-        resolve(true);
-      }, 600);
-    });
+export const getTransactionsByTimeframe = async (timeframe: 'day' | 'week' | 'month' | 'year'): Promise<Transaction[]> => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  const now = new Date();
+  let startDate = new Date();
+  
+  switch (timeframe) {
+    case 'day':
+      startDate.setDate(now.getDate() - 1);
+      break;
+    case 'week':
+      startDate.setDate(now.getDate() - 7);
+      break;
+    case 'month':
+      startDate.setMonth(now.getMonth() - 1);
+      break;
+    case 'year':
+      startDate.setFullYear(now.getFullYear() - 1);
+      break;
   }
+  
+  return mockTransactions.filter(transaction => {
+    const transactionDate = new Date(transaction.date);
+    return transactionDate >= startDate && transactionDate <= now;
+  });
+};
+
+export const getRecentTransactions = async (limit = 5): Promise<Transaction[]> => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // Sort by date (newest first) and limit
+  return [...mockTransactions]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, limit);
+};
+
+export async function getTransactions(filter?: { 
+  type?: 'all' | TransactionType; 
+  status?: 'all' | TransactionStatus;
+  search?: string;
+}): Promise<Transaction[]> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  let filteredTransactions = [...mockTransactions];
+
+  if (filter) {
+    if (filter.type && filter.type !== 'all') {
+      filteredTransactions = filteredTransactions.filter(
+        transaction => transaction.type === filter.type
+      );
+    }
+
+    if (filter.status && filter.status !== 'all') {
+      filteredTransactions = filteredTransactions.filter(
+        transaction => transaction.status === filter.status
+      );
+    }
+
+    if (filter.search) {
+      const searchLower = filter.search.toLowerCase();
+      filteredTransactions = filteredTransactions.filter(transaction => 
+        transaction.description.toLowerCase().includes(searchLower) || 
+        transaction.category.toLowerCase().includes(searchLower) ||
+        (transaction.reference && transaction.reference.toLowerCase().includes(searchLower))
+      );
+    }
+  }
+
+  return filteredTransactions;
+}
+
+export async function createTransaction(transaction: Omit<Transaction, 'id'>): Promise<Transaction> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  const newTransaction: Transaction = {
+    ...transaction,
+    id: Math.random().toString(36).substring(2, 9),
+  };
+
+  mockTransactions.push(newTransaction);
+  return newTransaction;
+}
+
+export async function updateTransaction(transaction: Transaction): Promise<Transaction> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  const index = mockTransactions.findIndex(t => t.id === transaction.id);
+  if (index >= 0) {
+    mockTransactions[index] = transaction;
+    return transaction;
+  }
+  throw new Error('Transaction not found');
+}
+
+export async function deleteTransaction(id: string): Promise<void> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  const index = mockTransactions.findIndex(t => t.id === id);
+  if (index >= 0) {
+    mockTransactions.splice(index, 1);
+    return;
+  }
+  throw new Error('Transaction not found');
+}
+
+export const getIncomeExpenseSummary = async (timeframe: 'week' | 'month' | 'year'): Promise<{
+  income: number;
+  expense: number;
+  balance: number;
+}> => {
+  const transactions = await getTransactionsByTimeframe(timeframe);
+  
+  const income = transactions
+    .filter(t => t.type === 'income' && t.status === 'completed')
+    .reduce((sum, t) => sum + t.amount, 0);
+    
+  const expense = transactions
+    .filter(t => t.type === 'expense' && t.status === 'completed')
+    .reduce((sum, t) => sum + t.amount, 0);
+    
+  return {
+    income,
+    expense,
+    balance: income - expense
+  };
+};
+
+export const getCashFlowData = async (timeframe: 'week' | 'month' | 'year'): Promise<{
+  labels: string[];
+  income: number[];
+  expense: number[];
+}> => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  let labels: string[] = [];
+  let format: string;
+  let periods: number;
+  
+  const now = new Date();
+  
+  switch (timeframe) {
+    case 'week':
+      format = 'day';
+      periods = 7;
+      // Generate last 7 days
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(now.getDate() - i);
+        labels.push(d.toLocaleDateString('en-US', { weekday: 'short' }));
+      }
+      break;
+    case 'month':
+      format = 'week';
+      periods = 4;
+      // Generate last 4 weeks
+      for (let i = 3; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(now.getDate() - (i * 7));
+        labels.push(`Week ${4-i}`);
+      }
+      break;
+    case 'year':
+      format = 'month';
+      periods = 12;
+      // Generate last 12 months
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date();
+        d.setMonth(now.getMonth() - i);
+        labels.push(d.toLocaleDateString('en-US', { month: 'short' }));
+      }
+      break;
+  }
+  
+  // Mock data for income and expense
+  const income = Array.from({ length: periods }, () => Math.floor(Math.random() * 5000) + 1000);
+  const expense = Array.from({ length: periods }, () => Math.floor(Math.random() * 3000) + 500);
+  
+  return { labels, income, expense };
 };
