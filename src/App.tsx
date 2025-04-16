@@ -1,15 +1,50 @@
 
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from './components/ui/sonner';
 import './index.css';
+
+// Pages
+import Dashboard from './pages/Dashboard';
+import Inventory from './pages/Inventory';
+import Contacts from './pages/Contacts';
+import Sales from './pages/Sales';
+import Purchase from './pages/Purchase';
+import Reports from './pages/Reports';
+import Transactions from './pages/Transactions';
+import Login from './pages/Login';
+import NotFound from './pages/NotFound';
+import Index from './pages/Index';
+
+// Contexts
+import { ContactProvider } from './context/ContactContext';
+import { InventoryProvider } from './context/InventoryContext';
+import { TransactionProvider } from './context/TransactionContext';
 
 const App = () => {
   return (
-    <div className="flex min-h-screen justify-center items-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-800">ERP System</h1>
-        <p className="mt-4 text-gray-600">Business management system</p>
-      </div>
-    </div>
+    <Router>
+      <ContactProvider>
+        <InventoryProvider>
+          <TransactionProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/inventory" element={<Inventory />} />
+              <Route path="/contacts" element={<Contacts />} />
+              <Route path="/sales" element={<Sales />} />
+              <Route path="/purchase" element={<Purchase />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/transactions" element={<Transactions />} />
+              <Route path="/404" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/404" replace />} />
+            </Routes>
+            <Toaster />
+          </TransactionProvider>
+        </InventoryProvider>
+      </ContactProvider>
+    </Router>
   );
 };
 

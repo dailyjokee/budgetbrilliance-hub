@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Table,
@@ -7,12 +6,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Contact } from '@/services/contactService';
-import { Badge } from '@/components/ui/badge';
+} from '../../components/ui/table';
+import { Button } from '../../components/ui/button';
+import { Contact } from '../../services/contactService';
+import { Badge } from '../../components/ui/badge';
 import { PencilIcon, TrashIcon } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '../../components/ui/skeleton';
 
 interface ContactListProps {
   contacts: Contact[];
