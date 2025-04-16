@@ -3,7 +3,7 @@ import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -11,21 +11,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from '../ui/form';
+import { Input } from '../ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+} from '../ui/select';
+import { Textarea } from '../ui/textarea';
 import { PlusIcon, TrashIcon } from 'lucide-react';
-import { useContacts } from '@/context/ContactContext';
-import { useInventory } from '@/context/InventoryContext';
-import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { useContacts } from '../context/ContactContext';
+import { useInventory } from '../context/InventoryContext';
+import { Card, CardContent } from '../ui/card';
+import { Separator } from '../ui/separator';
 
 const formSchema = z.object({
   supplier: z.string().min(1, { message: 'Supplier is required' }),
@@ -44,6 +44,8 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
+type ContactType = { id: string; name: string; type: string };
+type ProductType = { id: string; name: string };
 
 interface PurchaseOrderFormProps {
   purchaseOrder?: any;
@@ -59,7 +61,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
   const { contacts } = useContacts();
   const { products } = useInventory();
   
-  const suppliers = contacts.filter(contact => contact.type === 'supplier');
+  const suppliers = contacts.filter((contact: ContactType) => contact.type === 'supplier');
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -116,7 +118,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
               <FormField
                 control={form.control}
                 name="supplier"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Supplier</FormLabel>
                     <Select 
@@ -129,7 +131,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {suppliers.map(supplier => (
+                        {suppliers.map((supplier: ContactType) => (
                           <SelectItem key={supplier.id} value={supplier.id}>
                             {supplier.name}
                           </SelectItem>
@@ -144,7 +146,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
               <FormField
                 control={form.control}
                 name="date"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Order Date</FormLabel>
                     <FormControl>
@@ -158,7 +160,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
               <FormField
                 control={form.control}
                 name="expectedDelivery"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Expected Delivery Date</FormLabel>
                     <FormControl>
@@ -172,7 +174,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
               <FormField
                 control={form.control}
                 name="status"
-                render={({ field }) => (
+                render={({ field }: { field: any }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
                     <Select 
@@ -201,7 +203,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
         <FormField
           control={form.control}
           name="notes"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Notes</FormLabel>
               <FormControl>
@@ -248,7 +250,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
                     <FormField
                       control={form.control}
                       name={`items.${index}.productId`}
-                      render={({ field }) => (
+                      render={({ field }: { field: any }) => (
                         <FormItem>
                           <FormLabel>Product</FormLabel>
                           <Select 
@@ -261,7 +263,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {products.map(product => (
+                              {products.map((product: ProductType) => (
                                 <SelectItem key={product.id} value={product.id}>
                                   {product.name}
                                 </SelectItem>
@@ -278,7 +280,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
                     <FormField
                       control={form.control}
                       name={`items.${index}.description`}
-                      render={({ field }) => (
+                      render={({ field }: { field: any }) => (
                         <FormItem>
                           <FormLabel>Description</FormLabel>
                           <FormControl>
@@ -294,7 +296,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
                     <FormField
                       control={form.control}
                       name={`items.${index}.quantity`}
-                      render={({ field }) => (
+                      render={({ field }: { field: any }) => (
                         <FormItem>
                           <FormLabel>Quantity</FormLabel>
                           <FormControl>
@@ -310,7 +312,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
                     <FormField
                       control={form.control}
                       name={`items.${index}.price`}
-                      render={({ field }) => (
+                      render={({ field }: { field: any }) => (
                         <FormItem>
                           <FormLabel>Unit Price</FormLabel>
                           <FormControl>

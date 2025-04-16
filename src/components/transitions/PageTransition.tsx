@@ -6,6 +6,19 @@ interface PageTransitionProps {
   children: React.ReactNode;
 }
 
+export const contentVariants = (delay = 0) => ({
+  initial: { opacity: 0, y: 10 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.2,
+      delay
+    }
+  },
+  exit: { opacity: 0, y: -10 }
+});
+
 export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (
     <motion.div
