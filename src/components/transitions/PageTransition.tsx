@@ -1,6 +1,5 @@
 
-import { motion } from 'framer-motion';
-import React from 'react';
+import { motion } from "framer-motion";
 
 export const pageVariants = {
   initial: {
@@ -12,41 +11,42 @@ export const pageVariants = {
     y: 0,
     transition: {
       duration: 0.3,
-      ease: "easeOut",
-    }
+      ease: "easeInOut",
+    },
   },
   exit: {
     opacity: 0,
     y: -20,
     transition: {
       duration: 0.2,
-      ease: "easeIn",
-    }
-  }
+      ease: "easeInOut",
+    },
+  },
 };
 
-export const contentVariants = (delay: number = 0) => ({
+export const contentVariants = (delay = 0) => ({
   initial: {
     opacity: 0,
-    y: 10,
+    y: 20,
   },
   animate: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.3,
-      delay: delay,
-      ease: "easeOut",
-    }
-  }
+      delay,
+      ease: "easeInOut",
+    },
+  },
 });
 
-interface PageTransitionProps {
+export const PageTransition = ({
+  children,
+  className = "",
+}: {
   children: React.ReactNode;
   className?: string;
-}
-
-export function PageTransition({ children, className }: PageTransitionProps) {
+}) => {
   return (
     <motion.div
       className={className}
@@ -58,4 +58,4 @@ export function PageTransition({ children, className }: PageTransitionProps) {
       {children}
     </motion.div>
   );
-}
+};
