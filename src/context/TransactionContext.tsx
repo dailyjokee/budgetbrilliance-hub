@@ -1,123 +1,189 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Transaction, transactionService } from '../services/transactionService';
-import { toast } from 'sonner';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { Transaction, filterTransactions } from '../services/transactionService';
 
+// Define the context type
 interface TransactionContextType {
   transactions: Transaction[];
   isLoading: boolean;
   error: Error | null;
-  filter: {
-    type: 'all' | 'income' | 'expense';
-    search: string;
-    status: 'all' | 'completed' | 'pending' | 'failed';
+  filter: { 
+    type: "income" | "expense" | "all"; 
+    search: string; 
+    status: "completed" | "pending" | "failed" | "all" 
   };
-  setFilter: (filter: Partial<TransactionContextType['filter']>) => void;
+  setFilter: (filter: Partial<{ 
+    type: "income" | "expense" | "all"; 
+    search: string; 
+    status: "completed" | "pending" | "failed" | "all" 
+  }>) => void;
   refreshTransactions: () => Promise<void>;
-  createTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<Transaction>;
-  updateTransaction: (transaction: Transaction) => Promise<Transaction>;
-  deleteTransaction: (id: string) => Promise<boolean>;
+  createTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<void>;
+  updateTransaction: (transaction: Transaction) => Promise<void>;
+  deleteTransaction: (id: string) => Promise<void>;
 }
 
+// Create the context
 const TransactionContext = createContext<TransactionContextType | undefined>(undefined);
 
-export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+// Mock data for initial state
+const mockTransactions: Transaction[] = [
+  {
+    id: '1',
+    type: 'income',
+    name: 'Client Payment',
+    category: 'Services',
+    amount: 2500,
+    date: '2023-05-15',
+    status: 'completed',
+    paymentMethod: 'Bank Transfer',
+    reference: 'INV-001'
+  },
+  {
+    id: '2',
+    type: 'expense',
+    name: 'Office Supplies',
+    category: 'Operations',
+    amount: 149.99,
+    date: '2023-05-13',
+    status: 'completed',
+    paymentMethod: 'Credit Card',
+    reference: 'PO-113'
+  },
+  {
+    id: '3',
+    type: 'expense',
+    name: 'Software License',
+    category: 'Software',
+    amount: 79.99,
+    date: '2023-05-10',
+    status: 'pending',
+    paymentMethod: 'Credit Card',
+    reference: 'LIC-456'
+  },
+  {
+    id: '4',
+    type: 'income',
+    name: 'Consulting',
+    category: 'Services',
+    amount: 1200,
+    date: '2023-05-08',
+    status: 'completed',
+    paymentMethod: 'Bank Transfer',
+    reference: 'CONS-1234'
+  },
+];
+
+// Provider component
+export const TransactionProvider = ({ children }: { children: ReactNode }) => {
+  const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [filter, setFilterState] = useState({
-    type: 'all' as const,
+  const [filter, setFilter] = useState<TransactionContextType['filter']>({
+    type: 'all',
     search: '',
-    status: 'all' as const
+    status: 'all'
   });
 
-  const loadTransactions = async () => {
+  // Update the filter state
+  const updateFilter = (newFilter: Partial<typeof filter>) => {
+    setFilter(prev => ({
+      ...prev,
+      ...newFilter
+    }));
+  };
+
+  // Refresh transactions
+  const refreshTransactions = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const filteredTransactions = await transactionService.filterTransactions({
-        type: filter.type === 'all' ? undefined : filter.type,
-        search: filter.search || undefined,
-        status: filter.status === 'all' ? undefined : filter.status
-      });
-      setTransactions(filteredTransactions);
+      // In a real app, this would be an API call
+      // For now, we'll just simulate a delay and return the mock data
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setTransactions(mockTransactions);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load transactions'));
-      toast.error('Failed to load transactions');
+      setError(err as Error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    loadTransactions();
-  }, [filter]);
-
-  const setFilter = (newFilter: Partial<TransactionContextType['filter']>) => {
-    setFilterState(prev => ({ ...prev, ...newFilter }));
-  };
-
-  const refreshTransactions = async () => {
-    await loadTransactions();
-  };
-
+  // Create a new transaction
   const createTransaction = async (transaction: Omit<Transaction, 'id'>) => {
+    setIsLoading(true);
     try {
-      const newTransaction = await transactionService.createTransaction(transaction);
-      await refreshTransactions();
-      return newTransaction;
+      // In a real app, this would be an API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const newTransaction = {
+        ...transaction,
+        id: Date.now().toString(),
+      };
+      setTransactions([newTransaction, ...transactions]);
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to create transaction'));
-      toast.error('Failed to create transaction');
-      throw err;
+      setError(err as Error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // Update a transaction
   const updateTransaction = async (transaction: Transaction) => {
+    setIsLoading(true);
     try {
-      const updatedTransaction = await transactionService.updateTransaction(transaction);
-      await refreshTransactions();
-      return updatedTransaction;
+      // In a real app, this would be an API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setTransactions(
+        transactions.map(t => (t.id === transaction.id ? transaction : t))
+      );
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to update transaction'));
-      toast.error('Failed to update transaction');
-      throw err;
+      setError(err as Error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // Delete a transaction
   const deleteTransaction = async (id: string) => {
+    setIsLoading(true);
     try {
-      const success = await transactionService.deleteTransaction(id);
-      if (success) {
-        await refreshTransactions();
-      }
-      return success;
+      // In a real app, this would be an API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setTransactions(transactions.filter(t => t.id !== id));
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to delete transaction'));
-      toast.error('Failed to delete transaction');
-      throw err;
+      setError(err as Error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const contextValue: TransactionContextType = {
-    transactions,
+  // Filter transactions based on the current filter
+  const filteredTransactions = filterTransactions(transactions, filter);
+
+  // Context value
+  const value = {
+    transactions: filteredTransactions,
     isLoading,
     error,
     filter,
-    setFilter,
+    setFilter: updateFilter,
     refreshTransactions,
     createTransaction,
     updateTransaction,
-    deleteTransaction
+    deleteTransaction,
   };
 
   return (
-    <TransactionContext.Provider value={contextValue}>
+    <TransactionContext.Provider value={value}>
       {children}
     </TransactionContext.Provider>
   );
 };
 
+// Hook for using the transaction context
 export const useTransactions = () => {
   const context = useContext(TransactionContext);
   if (context === undefined) {

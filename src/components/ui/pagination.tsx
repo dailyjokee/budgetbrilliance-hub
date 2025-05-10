@@ -39,7 +39,7 @@ type PaginationLinkProps = {
   isActive?: boolean
 } & Pick<React.ComponentProps<"a">, "className" | "href" | "onClick"> & {
   size?: "default" | "sm" | "lg" | "icon";
-}
+};
 
 const PaginationLink = ({
   className,
