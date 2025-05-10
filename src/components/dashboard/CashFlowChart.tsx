@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { contentVariants } from '@/components/transitions/PageTransition';
+import { contentVariants } from '../transitions/PageTransition';
 import { 
   Area, 
   AreaChart, 
@@ -11,7 +11,7 @@ import {
   XAxis, 
   YAxis 
 } from 'recharts';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 interface CashFlowData {
   name: string;
