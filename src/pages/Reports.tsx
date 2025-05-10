@@ -1,16 +1,17 @@
+
 import React, { useState } from 'react';
 import { PageTransition } from '../components/transitions/PageTransition';
 import DashboardLayout from '../layout/DashboardLayout';
 import { Button } from '../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { BarChart3Icon, Calendar, CreditCard, Download, PieChart } from 'lucide-react';
+import { BarChart3Icon, Calendar as CalendarIcon, CreditCard, Download, PieChart, Users as UsersIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import { pageVariants } from '../components/transitions/PageTransition';
 import useHome from '../hooks/use-home';
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '../components/ui/table';
-import { Users } from 'lucide-react';
+import { Calendar } from '../components/ui/calendar';
 
 interface Invoice {
   id: string;
@@ -87,7 +88,7 @@ const Reports = () => {
                     <CardTitle className="text-sm font-medium">
                       Active Now
                     </CardTitle>
-                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <UsersIcon className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">721</div>
@@ -252,7 +253,8 @@ const Reports = () => {
   );
 };
 
-function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {
+// This function has been renamed to CalendarIconSVG to avoid the conflict with the Calendar component
+function CalendarIconSVG(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -274,25 +276,26 @@ function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function Users(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-      <circle cx="8.5" cy="7" r="4" />
-      <path d="M20 8v6M23 11h-6" />
-    </svg>
-  );
-}
+// This function is no longer needed as we're using the lucide-react Users icon
+// function Users(props: React.SVGProps<SVGSVGElement>) {
+//   return (
+//     <svg
+//       {...props}
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="24"
+//       height="24"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="2"
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//     >
+//       <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+//       <circle cx="8.5" cy="7" r="4" />
+//       <path d="M20 8v6M23 11h-6" />
+//     </svg>
+//   );
+// }
 
 export default Reports;
