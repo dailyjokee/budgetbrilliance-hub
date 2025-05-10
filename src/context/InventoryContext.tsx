@@ -7,7 +7,7 @@ import {
   createProduct as createProductService,
   updateProduct as updateProductService,
   deleteProduct as deleteProductService
-} from '@/services/inventoryService';
+} from '../services/inventoryService';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface InventoryContextType {
@@ -33,9 +33,10 @@ export const InventoryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   
   const queryClient = useQueryClient();
   
+  // Removed filter param since it's likely not implemented in getProducts
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products', filter],
-    queryFn: () => getProducts(filter),
+    queryFn: () => getProducts(),
   });
   
   const createMutation = useMutation({

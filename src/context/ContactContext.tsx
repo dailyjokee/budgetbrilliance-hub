@@ -7,7 +7,7 @@ import {
   createContact as createContactService,
   updateContact as updateContactService,
   deleteContact as deleteContactService
-} from '@/services/contactService';
+} from '../services/contactService';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface ContactContextType {
@@ -33,9 +33,10 @@ export const ContactProvider: React.FC<{ children: React.ReactNode }> = ({ child
   
   const queryClient = useQueryClient();
   
+  // Removed filter param since it's likely not implemented in getContacts
   const { data: contacts = [], isLoading } = useQuery({
     queryKey: ['contacts', filter],
-    queryFn: () => getContacts(filter),
+    queryFn: () => getContacts(),
   });
   
   const createMutation = useMutation({

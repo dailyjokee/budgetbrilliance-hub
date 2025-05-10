@@ -7,6 +7,7 @@ export const pageVariants = {
   exit: { opacity: 0, x: 10 },
 };
 
+// Modified to be a function that returns the variants object instead of being called
 export const contentVariants = (delay: number = 0) => ({
   initial: { opacity: 0, y: 20 },
   animate: { 

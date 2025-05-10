@@ -22,8 +22,8 @@ import {
 } from '../ui/select';
 import { Textarea } from '../ui/textarea';
 import { PlusIcon, TrashIcon } from 'lucide-react';
-import { useContacts } from '../context/ContactContext';
-import { useInventory } from '../context/InventoryContext';
+import { useContacts } from '../../context/ContactContext';
+import { useInventory } from '../../context/InventoryContext';
 import { Card, CardContent } from '../ui/card';
 import { Separator } from '../ui/separator';
 
