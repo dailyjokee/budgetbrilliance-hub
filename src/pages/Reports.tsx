@@ -98,6 +98,7 @@ const Reports = () => {
                 </Card>
               </div>
             </TabsContent>
+            
             <TabsContent value="analytics">
               <div className="container mx-auto py-10">
                 <h2 className="text-2xl font-bold mb-4">Sales Analytics</h2>
@@ -193,6 +194,7 @@ const Reports = () => {
                 </section>
               </div>
             </TabsContent>
+            
             <TabsContent value="export" className="space-y-4">
               <div className="container mx-auto py-10">
                 <h2 className="text-2xl font-bold mb-4">Export Reports</h2>
