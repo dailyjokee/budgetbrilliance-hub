@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { format } from 'date-fns';
 import { ArrowDownLeft, ArrowUpRight, CalendarIcon, ClockIcon } from 'lucide-react';
-import { Transaction } from '@/services/transactionService';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
+import { Transaction } from '../../services/transactionService';
+import { Button } from '../../components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '../../components/ui/dialog';
+import { cn } from '../../lib/utils';
 
 interface TransactionDetailsProps {
   transaction: Transaction;
