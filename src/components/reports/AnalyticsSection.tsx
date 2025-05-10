@@ -15,6 +15,9 @@ interface Invoice {
 const AnalyticsSection = () => {
   const { data } = useHome();
   
+  // Safety check to make sure data is available
+  const invoices = data || [];
+  
   return (
     <div className="container mx-auto py-10">
       <h2 className="text-2xl font-bold mb-4">Sales Analytics</h2>
@@ -60,7 +63,7 @@ const AnalyticsSection = () => {
         <h3 className="text-xl font-semibold mb-4">Product Performance</h3>
         <Table>
           <TableCaption>
-            A comprehensive list of all invoinces
+            A comprehensive list of all invoices
           </TableCaption>
           <TableHeader>
             <TableRow>
@@ -71,7 +74,7 @@ const AnalyticsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((invoice: Invoice) => (
+            {invoices.map((invoice: Invoice) => (
               <TableRow key={invoice.id}>
                 <TableCell className="font-medium">{invoice.invoice}</TableCell>
                 <TableCell>{invoice.customer}</TableCell>

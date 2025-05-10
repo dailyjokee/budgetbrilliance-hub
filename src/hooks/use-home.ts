@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+// import { supabase } from '../integrations/supabase/client';
 
 interface Invoice {
   id: string;
@@ -68,6 +69,29 @@ export default function useHome() {
       amount: '$250.00',
     }
   ]);
+
+  // Uncomment and modify this code when you're ready to fetch real data from Supabase
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const { data: invoicesData, error } = await supabase
+  //         .from('invoices')
+  //         .select('*')
+  //         .order('date', { ascending: false });
+  //         
+  //       if (error) {
+  //         console.error('Error fetching invoices:', error);
+  //         return;
+  //       }
+  //       
+  //       setData(invoicesData);
+  //     } catch (error) {
+  //       console.error('Error in data fetching:', error);
+  //     }
+  //   };
+  //   
+  //   fetchData();
+  // }, []);
 
   return { data };
 }
