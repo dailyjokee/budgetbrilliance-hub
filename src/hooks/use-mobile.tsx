@@ -1,27 +1,25 @@
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-export function useMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-
+export function useMobile(breakpoint: number = 768): boolean {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  
   useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < breakpoint);
     };
-
+    
     // Initial check
-    checkIfMobile();
-
-    // Add event listener
-    window.addEventListener('resize', checkIfMobile);
-
-    // Cleanup
+    checkIsMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Clean up event listener
     return () => {
-      window.removeEventListener('resize', checkIfMobile);
+      window.removeEventListener('resize', checkIsMobile);
     };
-  }, []);
-
+  }, [breakpoint]);
+  
   return isMobile;
 }
-
-export default useMobile;
