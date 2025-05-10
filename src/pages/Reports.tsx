@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { PageTransition } from '../components/transitions/PageTransition';
 import DashboardLayout from '../layout/DashboardLayout';
@@ -11,6 +10,7 @@ import { motion } from 'framer-motion';
 import { pageVariants } from '../components/transitions/PageTransition';
 import useHome from '../hooks/use-home';
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '../components/ui/table';
+import { Users } from 'lucide-react';
 
 interface Invoice {
   id: string;
