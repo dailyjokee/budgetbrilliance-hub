@@ -4,7 +4,7 @@ import DashboardLayout from '../layout/DashboardLayout';
 import { Button } from '../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { BarChart3Icon, Calendar as CalendarIcon, CreditCard, Download, PieChart, Users as UsersIcon } from 'lucide-react';
+import { BarChart3Icon, Calendar as CalendarIcon, CreditCard, Download, PieChart, Users } from 'lucide-react';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import { pageVariants } from '../components/transitions/PageTransition';
@@ -87,7 +87,7 @@ const Reports = () => {
                     <CardTitle className="text-sm font-medium">
                       Active Now
                     </CardTitle>
-                    <UsersIcon className="h-4 w-4 text-muted-foreground" />
+                    <Users className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">721</div>
@@ -251,50 +251,5 @@ const Reports = () => {
     </DashboardLayout>
   );
 };
-
-// This function has been renamed to CalendarIconSVG to avoid the conflict with the Calendar component
-function CalendarIconSVG(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-      <line x1="16" x2="16" y1="2" y2="6" />
-      <line x1="8" x2="8" y1="2" y2="6" />
-      <line x1="3" x2="21" y1="10" y2="10" />
-    </svg>
-  );
-}
-
-// This function is no longer needed as we're using the lucide-react Users icon
-// function Users(props: React.SVGProps<SVGSVGElement>) {
-//   return (
-//     <svg
-//       {...props}
-//       xmlns="http://www.w3.org/2000/svg"
-//       width="24"
-//       height="24"
-//       viewBox="0 0 24 24"
-//       fill="none"
-//       stroke="currentColor"
-//       strokeWidth="2"
-//       strokeLinecap="round"
-//       strokeLinejoin="round"
-//     >
-//       <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-//       <circle cx="8.5" cy="7" r="4" />
-//       <path d="M20 8v6M23 11h-6" />
-//     </svg>
-//   );
-// }
 
 export default Reports;
