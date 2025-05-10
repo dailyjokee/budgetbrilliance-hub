@@ -55,55 +55,21 @@ const mockTransactions: Transaction[] = [
   },
 ];
 
-interface TransactionFilter {
-  type?: TransactionType;
-  search?: string;
-  status?: TransactionStatus;
-}
-
-const filterTransactions = async (filter?: TransactionFilter): Promise<Transaction[]> => {
-  // Simulate API call
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      let filteredTransactions = [...mockTransactions];
-      
-      if (filter?.type) {
-        filteredTransactions = filteredTransactions.filter(tx => tx.type === filter.type);
-      }
-      
-      if (filter?.search) {
-        const searchLower = filter.search.toLowerCase();
-        filteredTransactions = filteredTransactions.filter(tx => 
-          tx.name.toLowerCase().includes(searchLower) || 
-          tx.description?.toLowerCase().includes(searchLower) || 
-          tx.category.toLowerCase().includes(searchLower)
-        );
-      }
-      
-      if (filter?.status) {
-        filteredTransactions = filteredTransactions.filter(tx => tx.status === filter.status);
-      }
-      
-      resolve(filteredTransactions);
-    }, 500);
-  });
-};
-
-const getTransactions = async (): Promise<Transaction[]> => {
+export const getTransactions = async (): Promise<Transaction[]> => {
   // Simulate API call
   return new Promise((resolve) => {
     setTimeout(() => resolve(mockTransactions), 500);
   });
 };
 
-const getTransactionById = async (id: string): Promise<Transaction | undefined> => {
+export const getTransactionById = async (id: string): Promise<Transaction | undefined> => {
   // Simulate API call
   return new Promise((resolve) => {
     setTimeout(() => resolve(mockTransactions.find(transaction => transaction.id === id)), 500);
   });
 };
 
-const createTransaction = async (transaction: Omit<Transaction, "id">): Promise<Transaction> => {
+export const createTransaction = async (transaction: Omit<Transaction, "id">): Promise<Transaction> => {
   // Simulate API call
   const newTransaction = {
     ...transaction,
@@ -115,25 +81,16 @@ const createTransaction = async (transaction: Omit<Transaction, "id">): Promise<
   });
 };
 
-const updateTransaction = async (transaction: Transaction): Promise<Transaction> => {
+export const updateTransaction = async (transaction: Transaction): Promise<Transaction> => {
   // Simulate API call
   return new Promise((resolve) => {
     setTimeout(() => resolve(transaction), 500);
   });
 };
 
-const deleteTransaction = async (id: string): Promise<boolean> => {
+export const deleteTransaction = async (id: string): Promise<void> => {
   // Simulate API call
   return new Promise((resolve) => {
-    setTimeout(() => resolve(true), 500);
+    setTimeout(() => resolve(), 500);
   });
-};
-
-export const transactionService = {
-  getTransactions,
-  getTransactionById,
-  createTransaction,
-  updateTransaction,
-  deleteTransaction,
-  filterTransactions
 };

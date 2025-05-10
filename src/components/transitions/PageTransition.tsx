@@ -1,29 +1,30 @@
 
-import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import React from 'react';
+import { motion } from 'framer-motion';
 
 interface PageTransitionProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-// Fixed to be a function with a parameter
 export const contentVariants = (delay = 0) => ({
   initial: { opacity: 0, y: 10 },
   animate: { 
     opacity: 1, 
     y: 0,
-    transition: { duration: 0.2, delay }
+    transition: { 
+      duration: 0.2,
+      delay
+    }
   },
   exit: { opacity: 0, y: -10 }
 });
 
-const PageTransition = ({ children }: PageTransitionProps) => {
+export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (
     <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={contentVariants()}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
     >
       {children}

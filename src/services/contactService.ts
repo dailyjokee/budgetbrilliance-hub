@@ -1,85 +1,56 @@
 
-export type ContactType = 'customer' | 'supplier' | 'employee';
+export type ContactType = 'customer' | 'supplier';
 
 export interface Contact {
   id: string;
   name: string;
+  type: ContactType;
   email: string;
   phone: string;
-  type: ContactType;
+  address: string;
   company?: string;
-  address?: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
+  status: 'active' | 'inactive';
 }
 
-interface ContactFilter {
-  type?: 'all' | ContactType;
-  search?: string;
-}
-
+// Mock data and functions
 const mockContacts: Contact[] = [
   {
     id: '1',
     name: 'John Doe',
-    email: 'john@example.com',
-    phone: '123-456-7890',
     type: 'customer',
-    company: 'ABC Corp',
+    email: 'john@example.com',
+    phone: '(555) 123-4567',
     address: '123 Main St, Anytown, USA',
-    notes: 'Frequent buyer',
-    createdAt: '2025-01-15',
-    updatedAt: '2025-03-20'
+    company: 'Acme Inc',
+    status: 'active',
   },
   {
     id: '2',
     name: 'Jane Smith',
-    email: 'jane@example.com',
-    phone: '987-654-3210',
     type: 'supplier',
-    company: 'XYZ Supplies',
-    address: '456 Oak Ave, Business City, USA',
-    createdAt: '2025-02-10',
-    updatedAt: '2025-02-10'
+    email: 'jane@example.com',
+    phone: '(555) 987-6543',
+    address: '456 Oak St, Anytown, USA',
+    company: 'Smith Supplies',
+    status: 'active',
   },
-  {
-    id: '3',
-    name: 'Bob Johnson',
-    email: 'bob@example.com',
-    phone: '555-123-4567',
-    type: 'employee',
-    notes: 'Sales department',
-    createdAt: '2025-01-05',
-    updatedAt: '2025-04-12'
-  }
 ];
 
-export const getContacts = async (filter?: ContactFilter): Promise<Contact[]> => {
+export const getContacts = async (): Promise<Contact[]> => {
   // Simulate API call
   return new Promise((resolve) => {
-    setTimeout(() => {
-      let filteredContacts = [...mockContacts];
-      
-      if (filter?.type && filter.type !== 'all') {
-        filteredContacts = filteredContacts.filter(contact => contact.type === filter.type);
-      }
-      
-      if (filter?.search) {
-        const searchLower = filter.search.toLowerCase();
-        filteredContacts = filteredContacts.filter(contact => 
-          contact.name.toLowerCase().includes(searchLower) || 
-          contact.email.toLowerCase().includes(searchLower) || 
-          contact.company?.toLowerCase().includes(searchLower)
-        );
-      }
-      
-      resolve(filteredContacts);
-    }, 500);
+    setTimeout(() => resolve(mockContacts), 500);
   });
 };
 
-export const createContact = async (contact: Omit<Contact, 'id'>): Promise<Contact> => {
+export const getContactById = async (id: string): Promise<Contact | undefined> => {
+  // Simulate API call
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(mockContacts.find(contact => contact.id === id)), 500);
+  });
+};
+
+export const createContact = async (contact: Omit<Contact, "id">): Promise<Contact> => {
   // Simulate API call
   const newContact = {
     ...contact,

@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { cn } from '../../lib/utils';
+import { cn } from '@/lib/utils';
 import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 
 interface StatCardProps {

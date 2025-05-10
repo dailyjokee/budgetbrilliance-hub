@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Transaction, transactionService } from '../services/transactionService';
+import { Transaction, transactionService } from '@/services/transactionService';
 import { toast } from 'sonner';
 
 interface TransactionContextType {
@@ -12,11 +12,7 @@ interface TransactionContextType {
     search: string;
     status: 'all' | 'completed' | 'pending' | 'failed';
   };
-  setFilter: (filter: Partial<{
-    type: 'all' | 'income' | 'expense';
-    search: string;
-    status: 'all' | 'completed' | 'pending' | 'failed';
-  }>) => void;
+  setFilter: (filter: Partial<TransactionContextType['filter']>) => void;
   refreshTransactions: () => Promise<void>;
   createTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<Transaction>;
   updateTransaction: (transaction: Transaction) => Promise<Transaction>;
@@ -103,7 +99,7 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
   };
 
-  const contextValue: TransactionContextType = {
+  const contextValue = {
     transactions,
     isLoading,
     error,

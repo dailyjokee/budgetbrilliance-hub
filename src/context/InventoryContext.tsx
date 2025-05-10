@@ -7,7 +7,7 @@ import {
   createProduct as createProductService,
   updateProduct as updateProductService,
   deleteProduct as deleteProductService
-} from '../services/inventoryService';
+} from '@/services/inventoryService';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface InventoryContextType {
@@ -68,8 +68,7 @@ export const InventoryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
   
   const deleteProduct = async (id: string) => {
-    await deleteMutation.mutateAsync(id);
-    return;
+    return deleteMutation.mutateAsync(id);
   };
   
   return (
