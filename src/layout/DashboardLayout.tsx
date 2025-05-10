@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -15,8 +14,8 @@ import {
   ShoppingBag,
   BarChart3
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useMobile } from '@/hooks/use-mobile';
+import { Button } from '../components/ui/button';
+import { useMobile } from '../hooks/use-mobile';
 
 interface NavItemProps {
   icon: React.ReactNode;
