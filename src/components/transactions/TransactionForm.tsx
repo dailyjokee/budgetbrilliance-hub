@@ -1,12 +1,11 @@
-
 import React from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Calendar } from 'lucide-react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '../../components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,14 +14,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar as CalendarComponent } from '@/components/ui/calendar';
-import { Transaction } from '@/services/transactionService';
+} from '../../components/ui/form';
+import { Input } from '../../components/ui/input';
+import { Textarea } from '../../components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
+import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/popover';
+import { Calendar as CalendarComponent } from '../../components/ui/calendar';
+import { Transaction } from '../../services/transactionService';
 
 // Form schema
 const formSchema = z.object({
@@ -49,6 +48,15 @@ interface TransactionFormProps {
   transaction?: Transaction;
   onSubmit: (values: FormValues) => void;
   onCancel: () => void;
+}
+
+// Define the field type for form fields
+interface FieldType {
+  onChange: (...event: any[]) => void;
+  onBlur: () => void;
+  value: any;
+  name: string;
+  ref: React.Ref<any>;
 }
 
 export function TransactionForm({ transaction, onSubmit, onCancel }: TransactionFormProps) {
@@ -82,7 +90,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
         <FormField
           control={form.control}
           name="type"
-          render={({ field }) => (
+          render={({ field }: { field: FieldType }) => (
             <FormItem className="space-y-3">
               <FormLabel>Transaction Type</FormLabel>
               <FormControl>
@@ -114,7 +122,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="name"
-            render={({ field }) => (
+            render={({ field }: { field: FieldType }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
@@ -128,7 +136,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="amount"
-            render={({ field }) => (
+            render={({ field }: { field: FieldType }) => (
               <FormItem>
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
@@ -145,7 +153,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="category"
-            render={({ field }) => (
+            render={({ field }: { field: FieldType }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -170,7 +178,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="date"
-            render={({ field }) => (
+            render={({ field }: { field: FieldType }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Date</FormLabel>
                 <Popover>
@@ -181,7 +189,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
                         className="w-full pl-3 text-left font-normal"
                       >
                         {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                        <Calendar className="ml-auto h-4 w-4 opacity-50" />
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -202,7 +210,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="paymentMethod"
-            render={({ field }) => (
+            render={({ field }: { field: FieldType }) => (
               <FormItem>
                 <FormLabel>Payment Method</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -227,7 +235,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
           <FormField
             control={form.control}
             name="reference"
-            render={({ field }) => (
+            render={({ field }: { field: FieldType }) => (
               <FormItem>
                 <FormLabel>Reference (Optional)</FormLabel>
                 <FormControl>
@@ -242,7 +250,7 @@ export function TransactionForm({ transaction, onSubmit, onCancel }: Transaction
         <FormField
           control={form.control}
           name="description"
-          render={({ field }) => (
+          render={({ field }: { field: FieldType }) => (
             <FormItem>
               <FormLabel>Description (Optional)</FormLabel>
               <FormControl>
