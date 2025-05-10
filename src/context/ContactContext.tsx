@@ -7,7 +7,7 @@ import {
   createContact as createContactService,
   updateContact as updateContactService,
   deleteContact as deleteContactService
-} from '@/services/contactService';
+} from '../services/contactService';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface ContactContextType {
@@ -68,7 +68,8 @@ export const ContactProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
   
   const deleteContact = async (id: string) => {
-    return deleteMutation.mutateAsync(id);
+    await deleteMutation.mutateAsync(id);
+    return;
   };
   
   return (

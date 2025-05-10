@@ -6,19 +6,24 @@ interface PageTransitionProps {
   children: ReactNode;
 }
 
-export const contentVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 },
+// Fixed to be a function with a parameter
+export const contentVariants = (delay = 0) => ({
+  initial: { opacity: 0, y: 10 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.2, delay }
+  },
   exit: { opacity: 0, y: -10 }
-};
+});
 
 const PageTransition = ({ children }: PageTransitionProps) => {
   return (
     <motion.div
-      initial="hidden"
-      animate="visible"
+      initial="initial"
+      animate="animate"
       exit="exit"
-      variants={contentVariants}
+      variants={contentVariants()}
       transition={{ duration: 0.2 }}
     >
       {children}

@@ -1,65 +1,99 @@
 
-export type ProductCategory = 'raw' | 'finished' | 'packaging' | 'other';
+export type ProductCategory = 'electronics' | 'clothing' | 'food' | 'other';
 
 export interface Product {
   id: string;
   name: string;
-  sku: string;
+  description?: string;
   category: ProductCategory;
-  description: string;
-  quantity: number;
-  unit: string;
-  cost: number;
   price: number;
-  reorderLevel: number;
-  status: 'active' | 'inactive';
+  cost: number;
+  quantity: number;
+  lowStockThreshold: number;
+  sku: string;
+  barcode?: string;
+  image?: string;
+  lastRestocked?: string;
 }
 
-// Mock data and functions
+interface ProductFilter {
+  category?: 'all' | ProductCategory | 'low-stock';
+  search?: string;
+}
+
 const mockProducts: Product[] = [
   {
     id: '1',
-    name: 'Widget A',
-    sku: 'WDG-001',
-    category: 'finished',
-    description: 'A high-quality widget',
+    name: 'Smartphone XYZ',
+    description: 'Latest model with advanced features',
+    category: 'electronics',
+    price: 799.99,
+    cost: 500,
     quantity: 25,
-    unit: 'piece',
-    cost: 10.50,
-    price: 24.99,
-    reorderLevel: 10,
-    status: 'active',
+    lowStockThreshold: 10,
+    sku: 'PHONE-001',
+    barcode: '123456789012',
+    lastRestocked: '2025-03-15'
   },
   {
     id: '2',
-    name: 'Raw Material B',
-    sku: 'RM-002',
-    category: 'raw',
-    description: 'Raw material for manufacturing',
-    quantity: 150,
-    unit: 'kg',
-    cost: 5.25,
-    price: 0,
-    reorderLevel: 50,
-    status: 'active',
+    name: 'Cotton T-Shirt',
+    description: 'Comfortable 100% cotton',
+    category: 'clothing',
+    price: 19.99,
+    cost: 8,
+    quantity: 100,
+    lowStockThreshold: 20,
+    sku: 'TSHIRT-001'
   },
+  {
+    id: '3',
+    name: 'Organic Pasta',
+    description: 'Premium quality pasta',
+    category: 'food',
+    price: 5.99,
+    cost: 2.5,
+    quantity: 8,
+    lowStockThreshold: 15,
+    sku: 'PASTA-001',
+    barcode: '987654321098',
+    lastRestocked: '2025-04-01'
+  }
 ];
 
-export const getProducts = async (): Promise<Product[]> => {
+export const getProducts = async (filter?: ProductFilter): Promise<Product[]> => {
   // Simulate API call
   return new Promise((resolve) => {
-    setTimeout(() => resolve(mockProducts), 500);
+    setTimeout(() => {
+      let filteredProducts = [...mockProducts];
+      
+      if (filter?.category) {
+        if (filter.category === 'low-stock') {
+          filteredProducts = filteredProducts.filter(product => 
+            product.quantity <= product.lowStockThreshold
+          );
+        } else if (filter.category !== 'all') {
+          filteredProducts = filteredProducts.filter(product => 
+            product.category === filter.category
+          );
+        }
+      }
+      
+      if (filter?.search) {
+        const searchLower = filter.search.toLowerCase();
+        filteredProducts = filteredProducts.filter(product => 
+          product.name.toLowerCase().includes(searchLower) || 
+          product.description?.toLowerCase().includes(searchLower) || 
+          product.sku.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      resolve(filteredProducts);
+    }, 500);
   });
 };
 
-export const getProductById = async (id: string): Promise<Product | undefined> => {
-  // Simulate API call
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(mockProducts.find(product => product.id === id)), 500);
-  });
-};
-
-export const createProduct = async (product: Omit<Product, "id">): Promise<Product> => {
+export const createProduct = async (product: Omit<Product, 'id'>): Promise<Product> => {
   // Simulate API call
   const newProduct = {
     ...product,
