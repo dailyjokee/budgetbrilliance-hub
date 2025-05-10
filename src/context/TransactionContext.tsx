@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Transaction, transactionService } from '@/services/transactionService';
+import { Transaction, transactionService } from '../services/transactionService';
 import { toast } from 'sonner';
 
 interface TransactionContextType {
@@ -53,7 +53,7 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ c
     loadTransactions();
   }, [filter]);
 
-  const setFilter = (newFilter: Partial<typeof filter>) => {
+  const setFilter = (newFilter: Partial<TransactionContextType['filter']>) => {
     setFilterState(prev => ({ ...prev, ...newFilter }));
   };
 
@@ -99,7 +99,7 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
   };
 
-  const contextValue = {
+  const contextValue: TransactionContextType = {
     transactions,
     isLoading,
     error,

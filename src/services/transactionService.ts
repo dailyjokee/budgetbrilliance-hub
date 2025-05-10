@@ -15,6 +15,13 @@ export interface Transaction {
   status: TransactionStatus;
 }
 
+// Filter parameters
+interface FilterParams {
+  type?: TransactionType;
+  search?: string;
+  status?: TransactionStatus;
+}
+
 // Mock data and functions
 const mockTransactions: Transaction[] = [
   {
@@ -55,6 +62,34 @@ const mockTransactions: Transaction[] = [
   },
 ];
 
+const filterTransactions = async (filters: FilterParams): Promise<Transaction[]> => {
+  // Simulate API call
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      let filteredTransactions = [...mockTransactions];
+      
+      if (filters.type) {
+        filteredTransactions = filteredTransactions.filter(t => t.type === filters.type);
+      }
+      
+      if (filters.status) {
+        filteredTransactions = filteredTransactions.filter(t => t.status === filters.status);
+      }
+      
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        filteredTransactions = filteredTransactions.filter(t => 
+          t.name.toLowerCase().includes(searchLower) || 
+          t.description?.toLowerCase().includes(searchLower) ||
+          t.category.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      resolve(filteredTransactions);
+    }, 500);
+  });
+};
+
 export const getTransactions = async (): Promise<Transaction[]> => {
   // Simulate API call
   return new Promise((resolve) => {
@@ -88,9 +123,18 @@ export const updateTransaction = async (transaction: Transaction): Promise<Trans
   });
 };
 
-export const deleteTransaction = async (id: string): Promise<void> => {
+export const deleteTransaction = async (id: string): Promise<boolean> => {
   // Simulate API call
   return new Promise((resolve) => {
-    setTimeout(() => resolve(), 500);
+    setTimeout(() => resolve(true), 500);
   });
+};
+
+export const transactionService = {
+  getTransactions,
+  getTransactionById,
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
+  filterTransactions,
 };
