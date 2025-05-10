@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { contentVariants } from '@/components/transitions/PageTransition';
+import { contentVariants } from '../transitions/PageTransition';
 import { ArrowUpRight, ArrowDownLeft, Calendar } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Transaction } from '@/services/transactionService';
+import { cn } from '../../lib/utils';
+import { Transaction } from '../../services/transactionService';
 import { Link } from 'react-router-dom';
 
 interface RecentTransactionsProps {
