@@ -1,17 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PageTransition } from '@/components/transitions/PageTransition';
-import DashboardLayout from '@/layout/DashboardLayout';
-import { StatCard } from '@/components/dashboard/StatCard';
-import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
-import { CashFlowChart } from '@/components/dashboard/CashFlowChart';
+import { PageTransition } from '../components/transitions/PageTransition';
+import DashboardLayout from '../layout/DashboardLayout';
+import { StatCard } from '../components/dashboard/StatCard';
+import { RecentTransactions } from '../components/dashboard/RecentTransactions';
+import { CashFlowChart } from '../components/dashboard/CashFlowChart';
 import { 
   BanknoteIcon, 
   CreditCardIcon, 
   ArrowDownRightIcon, 
   ArrowUpRightIcon 
 } from 'lucide-react';
-import { Transaction } from '@/services/transactionService';
+import { Transaction } from '../services/transactionService';
 
 const Dashboard = () => {
   // Mock data for dashboard

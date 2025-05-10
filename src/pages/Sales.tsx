@@ -1,13 +1,12 @@
-
 import React, { useState } from 'react';
-import { PageTransition } from '@/components/transitions/PageTransition';
-import DashboardLayout from '@/layout/DashboardLayout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+import { PageTransition } from '../components/transitions/PageTransition';
+import DashboardLayout from '../layout/DashboardLayout';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Button } from '../components/ui/button';
 import { PlusIcon, SearchIcon, FilterIcon, BarChart3Icon } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { InvoiceList } from '@/components/sales/InvoiceList';
-import { InvoiceForm } from '@/components/sales/InvoiceForm';
+import { Input } from '../components/ui/input';
+import { InvoiceList } from '../components/sales/InvoiceList';
+import { InvoiceForm } from '../components/sales/InvoiceForm';
 import { 
   Dialog,
   DialogContent,
@@ -15,9 +14,9 @@ import {
   DialogTitle,
   DialogDescription,
   DialogTrigger
-} from '@/components/ui/dialog';
+} from '../components/ui/dialog';
 import { toast } from 'sonner';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from '../components/ui/scroll-area';
 
 const Sales = () => {
   // This is a placeholder until we implement the full Sales context
