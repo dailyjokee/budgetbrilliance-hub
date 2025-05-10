@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { PageTransition } from '../components/transitions/PageTransition';
 import DashboardLayout from '../layout/DashboardLayout';
 import { Button } from '../components/ui/button';
@@ -6,13 +7,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { BarChart3Icon, Calendar, CreditCard, Download, PieChart } from 'lucide-react';
 import { format } from 'date-fns';
-import { motion, MotionValue } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { pageVariants } from '../components/transitions/PageTransition';
 import useHome from '../hooks/use-home';
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '../components/ui/table';
 
+interface Invoice {
+  id: string;
+  invoice: string;
+  customer: string;
+  status: string;
+  amount: string;
+}
+
 const Reports = () => {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const { data } = useHome();
 
   return (
@@ -145,7 +154,7 @@ const Reports = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {data?.map((invoice) => (
+                      {data?.map((invoice: Invoice) => (
                         <TableRow key={invoice.id}>
                           <TableCell className="font-medium">{invoice.invoice}</TableCell>
                           <TableCell>{invoice.customer}</TableCell>
