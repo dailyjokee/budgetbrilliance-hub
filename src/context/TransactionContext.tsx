@@ -37,7 +37,8 @@ const mockTransactions: Transaction[] = [
     date: '2023-05-15',
     status: 'completed',
     paymentMethod: 'Bank Transfer',
-    reference: 'INV-001'
+    reference: 'INV-001',
+    description: 'Payment for consulting services'
   },
   {
     id: '2',
@@ -48,7 +49,8 @@ const mockTransactions: Transaction[] = [
     date: '2023-05-13',
     status: 'completed',
     paymentMethod: 'Credit Card',
-    reference: 'PO-113'
+    reference: 'PO-113',
+    description: 'Monthly office supplies purchase'
   },
   {
     id: '3',
@@ -59,7 +61,8 @@ const mockTransactions: Transaction[] = [
     date: '2023-05-10',
     status: 'pending',
     paymentMethod: 'Credit Card',
-    reference: 'LIC-456'
+    reference: 'LIC-456',
+    description: 'Annual software subscription'
   },
   {
     id: '4',
@@ -70,7 +73,8 @@ const mockTransactions: Transaction[] = [
     date: '2023-05-08',
     status: 'completed',
     paymentMethod: 'Bank Transfer',
-    reference: 'CONS-1234'
+    reference: 'CONS-1234',
+    description: 'Consultation for project planning'
   },
 ];
 

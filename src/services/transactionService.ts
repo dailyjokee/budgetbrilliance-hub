@@ -9,6 +9,7 @@ export interface Transaction {
   status: "completed" | "pending" | "failed";
   paymentMethod?: string;
   reference?: string;
+  description?: string; // Added missing description property
 }
 
 export const filterTransactions = (

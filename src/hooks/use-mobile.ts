@@ -17,7 +17,7 @@ export const useMobile = () => {
 
     // Clean up
     return () => {
-      window.addEventListener('resize', checkIfMobile);
+      window.removeEventListener('resize', checkIfMobile); // Fixed: was addEventListener, should be removeEventListener
     };
   }, []);
 
