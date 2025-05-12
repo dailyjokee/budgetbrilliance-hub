@@ -1,6 +1,6 @@
 
 // This file handles toast functionality
-import { toast as sonnerToast, type Toast } from "sonner";
+import { toast as sonnerToast } from "sonner";
 
 export const toast = sonnerToast;
 
@@ -15,7 +15,7 @@ export type ToastProps = {
 export const useToast = () => {
   return {
     toast: sonnerToast,
-    toasts: [] as Toast[],
+    toasts: [] as any[], // Using any[] instead of Toast[] since Toast is not exported
     dismiss: (toastId?: string) => {
       if (toastId) {
         sonnerToast.dismiss(toastId);

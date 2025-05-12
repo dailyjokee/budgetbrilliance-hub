@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster as SonnerToaster } from 'sonner';
+import { Toaster } from 'sonner';
 import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -45,7 +45,7 @@ const App = () => {
                 <Route path="/404" element={<NotFound />} />
                 <Route path="*" element={<Navigate to="/404" replace />} />
               </Routes>
-              <SonnerToaster />
+              <Toaster />
             </TransactionProvider>
           </InventoryProvider>
         </ContactProvider>
