@@ -22,7 +22,9 @@ const AnalyticsSection = () => {
   const calculateTotal = (): string => {
     try {
       const total = invoices.reduce((acc, invoice) => {
-        const amount = parseFloat(invoice.amount.replace('$', '').replace(',', ''));
+        // Safely extract amount value
+        const amountStr = invoice?.amount || '0';
+        const amount = parseFloat(amountStr.replace(/[^0-9.-]+/g, ''));
         return isNaN(amount) ? acc : acc + amount;
       }, 0);
       return `$${total.toFixed(2)}`;
@@ -88,7 +90,7 @@ const AnalyticsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoices.map((invoice: Invoice) => (
+            {invoices && invoices.map((invoice: Invoice) => (
               <TableRow key={invoice.id}>
                 <TableCell className="font-medium">{invoice.invoice}</TableCell>
                 <TableCell>{invoice.customer}</TableCell>

@@ -33,10 +33,16 @@ export const InventoryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   
   const queryClient = useQueryClient();
   
-  // Removed filter param since it's likely not implemented in getProducts
-  const { data: products = [], isLoading } = useQuery({
+  // Use mock data if query client is not available
+  const mockProducts: Product[] = [];
+  
+  const { data: products = mockProducts, isLoading } = useQuery({
     queryKey: ['products', filter],
     queryFn: () => getProducts(),
+    // Add a retry option with fewer attempts to avoid too many retries
+    retry: 1,
+    // Use stale time to reduce refetches
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
   
   const createMutation = useMutation({

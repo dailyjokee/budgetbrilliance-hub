@@ -33,10 +33,16 @@ export const ContactProvider: React.FC<{ children: React.ReactNode }> = ({ child
   
   const queryClient = useQueryClient();
   
-  // Removed filter param since it's likely not implemented in getContacts
-  const { data: contacts = [], isLoading } = useQuery({
+  // Use mock data if query client is not available (for testing/development)
+  const mockContacts: Contact[] = [];
+  
+  const { data: contacts = mockContacts, isLoading } = useQuery({
     queryKey: ['contacts', filter],
     queryFn: () => getContacts(),
+    // Add a retry option with fewer attempts to avoid too many retries
+    retry: 1,
+    // Use stale time to reduce refetches
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
   
   const createMutation = useMutation({
