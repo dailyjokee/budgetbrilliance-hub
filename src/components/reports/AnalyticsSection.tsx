@@ -18,6 +18,20 @@ const AnalyticsSection = () => {
   // Safety check to make sure data is available
   const invoices = data || [];
   
+  // Calculate total for table footer
+  const calculateTotal = (): string => {
+    try {
+      const total = invoices.reduce((acc, invoice) => {
+        const amount = parseFloat(invoice.amount.replace('$', '').replace(',', ''));
+        return isNaN(amount) ? acc : acc + amount;
+      }, 0);
+      return `$${total.toFixed(2)}`;
+    } catch (error) {
+      console.error('Error calculating total:', error);
+      return '$0.00';
+    }
+  };
+
   return (
     <div className="container mx-auto py-10">
       <h2 className="text-2xl font-bold mb-4">Sales Analytics</h2>
@@ -86,7 +100,7 @@ const AnalyticsSection = () => {
           <TableFooter>
             <TableRow>
               <TableCell colSpan={3}>Total</TableCell>
-              <TableCell className="text-right">$2,500.00</TableCell>
+              <TableCell className="text-right">{calculateTotal()}</TableCell>
             </TableRow>
           </TableFooter>
         </Table>
