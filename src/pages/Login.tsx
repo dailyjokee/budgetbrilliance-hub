@@ -7,14 +7,17 @@ import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { PageTransition } from '../components/transitions/PageTransition';
 import AuthLayout from '../layout/AuthLayout';
-import { toast } from 'sonner';
+import { toast } from '../hooks/use-toast';
 
 const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Login successful!');
+    toast({
+      title: "Login successful!",
+      variant: "default"
+    });
     // In a real app, you would validate credentials and handle auth
     // For demo purposes, we'll just navigate to the dashboard
     navigate('/dashboard');
