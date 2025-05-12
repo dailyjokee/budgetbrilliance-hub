@@ -1,22 +1,22 @@
 
 import React, { useState } from 'react';
-import { PageTransition } from '../components/transitions/PageTransition';
-import DashboardLayout from '../layout/DashboardLayout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Button } from '../components/ui/button';
+import { PageTransition } from '@/components/transitions/PageTransition';
+import DashboardLayout from '@/layout/DashboardLayout';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { PlusIcon, SearchIcon, FilterIcon, BarChart3Icon } from 'lucide-react';
-import { Input } from '../components/ui/input';
-import { ProductList } from '../components/inventory/ProductList';
-import { ProductForm } from '../components/inventory/ProductForm';
+import { Input } from '@/components/ui/input';
+import { ProductList } from '@/components/inventory/ProductList';
+import { ProductForm } from '@/components/inventory/ProductForm';
 import { 
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle, 
   DialogTrigger 
-} from '../components/ui/dialog';
+} from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { useInventory } from '../context/InventoryContext';
+import { useInventory } from '@/context/InventoryContext';
 
 const Inventory = () => {
   const { 

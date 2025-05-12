@@ -1,21 +1,22 @@
+
 import React, { useState } from 'react';
-import { PageTransition } from '../components/transitions/PageTransition';
-import DashboardLayout from '../layout/DashboardLayout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Button } from '../components/ui/button';
+import { PageTransition } from '@/components/transitions/PageTransition';
+import DashboardLayout from '@/layout/DashboardLayout';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { PlusIcon, SearchIcon, FilterIcon } from 'lucide-react';
-import { Input } from '../components/ui/input';
-import { ContactList } from '../components/contacts/ContactList';
-import { ContactForm } from '../components/contacts/ContactForm';
+import { Input } from '@/components/ui/input';
+import { ContactList } from '@/components/contacts/ContactList';
+import { ContactForm } from '@/components/contacts/ContactForm';
 import { 
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle, 
   DialogTrigger 
-} from '../components/ui/dialog';
+} from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { useContacts } from '../context/ContactContext';
+import { useContacts } from '@/context/ContactContext';
 
 const Contacts = () => {
   const { 

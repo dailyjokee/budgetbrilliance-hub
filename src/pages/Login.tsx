@@ -1,11 +1,12 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
-import { PageTransition } from '../components/transitions/PageTransition';
-import AuthLayout from '../layout/AuthLayout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { PageTransition } from '@/components/transitions/PageTransition';
+import AuthLayout from '@/layout/AuthLayout';
 import { toast } from 'sonner';
 
 const Login = () => {
@@ -13,7 +14,7 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast('Login successful!');
+    toast.success('Login successful!');
     // In a real app, you would validate credentials and handle auth
     // For demo purposes, we'll just navigate to the dashboard
     navigate('/dashboard');

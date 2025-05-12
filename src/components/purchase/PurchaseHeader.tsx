@@ -1,15 +1,15 @@
 
 import React from 'react';
-import { Button } from '../../components/ui/button';
+import { Button } from '@/components/ui/button';
 import { PlusIcon, SearchIcon, FilterIcon, ArrowDownUpIcon } from 'lucide-react';
-import { Input } from '../../components/ui/input';
+import { Input } from '@/components/ui/input';
 import { 
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle, 
   DialogTrigger 
-} from '../../components/ui/dialog';
+} from '@/components/ui/dialog';
 import { PurchaseOrderForm } from './PurchaseOrderForm';
 
 interface PurchaseHeaderProps {

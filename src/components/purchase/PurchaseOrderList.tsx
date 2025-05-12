@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Table,
@@ -6,11 +7,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../components/ui/table';
-import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { PencilIcon, TrashIcon, EyeIcon } from 'lucide-react';
-import { Skeleton } from '../../components/ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface PurchaseOrder {
   id: string;

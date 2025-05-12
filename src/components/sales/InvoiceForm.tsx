@@ -1,10 +1,6 @@
 
 import React from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '../ui/button';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { PlusIcon, TrashIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,79 +8,77 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Input } from '../ui/input';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import { Separator } from '../ui/separator';
-import { Card, CardContent } from '../ui/card';
+} from '@/components/ui/select';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { PlusIcon, Trash2Icon } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { Card, CardContent } from '@/components/ui/card';
 
-// Form schema definition
-const formSchema = z.object({
-  customer: z.string().min(1, { message: 'Customer is required' }),
-  date: z.string().min(1, { message: 'Date is required' }),
-  dueDate: z.string().min(1, { message: 'Due date is required' }),
-  status: z.enum(['draft', 'sent', 'paid', 'overdue']),
-  items: z.array(
-    z.object({
-      product: z.string().min(1, { message: 'Product is required' }),
-      description: z.string().optional(),
-      quantity: z.coerce.number().min(1, { message: 'Quantity must be at least 1' }),
-      price: z.coerce.number().min(0, { message: 'Price must be 0 or greater' }),
-    })
-  ).min(1, { message: 'At least one item is required' }),
-  notes: z.string().optional(),
+// Mock customers for demo
+const mockCustomers = [
+  { id: '1', name: 'John Doe' },
+  { id: '2', name: 'Jane Smith' },
+  { id: '3', name: 'Acme Corp' },
+  { id: '4', name: 'XYZ Industries' },
+  { id: '5', name: 'ABC Enterprises' },
+];
+
+// Mock products for demo
+const mockProducts = [
+  { id: '1', name: 'Premium Office Paper', price: 4.99 },
+  { id: '2', name: 'Colored Paper', price: 6.99 },
+  { id: '3', name: 'Cardboard Boxes', price: 1.50 },
+  { id: '4', name: 'Printer Ink', price: 24.99 },
+];
+
+// Define form schema
+const invoiceItemSchema = z.object({
+  product: z.string().min(1, 'Product is required'),
+  description: z.string().optional(),
+  quantity: z.coerce.number().min(1, 'Quantity must be at least 1'),
+  price: z.coerce.number().min(0, 'Price must be a positive number'),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+const invoiceFormSchema = z.object({
+  customer: z.string().min(1, 'Customer is required'),
+  dueDate: z.string().min(1, 'Due date is required'),
+  notes: z.string().optional(),
+  items: z.array(invoiceItemSchema).min(1, 'At least one item is required'),
+});
 
-// Sample data for the form
-const sampleCustomers = [
-  { id: '1', name: 'Acme Inc.' },
-  { id: '2', name: 'Wayne Enterprises' },
-  { id: '3', name: 'Stark Industries' },
-  { id: '4', name: 'Umbrella Corporation' },
-];
-
-const sampleProducts = [
-  { id: '1', name: 'Product A', price: 199.99 },
-  { id: '2', name: 'Product B', price: 299.99 },
-  { id: '3', name: 'Product C', price: 99.99 },
-  { id: '4', name: 'Product D', price: 499.99 },
-];
+type InvoiceFormValues = z.infer<typeof invoiceFormSchema>;
 
 interface InvoiceFormProps {
   invoice?: any;
-  onSubmit: (values: FormValues) => void;
+  onSubmit: (data: any) => void;
   onCancel: () => void;
 }
 
-export const InvoiceForm: React.FC<InvoiceFormProps> = ({
-  invoice,
-  onSubmit,
-  onCancel,
-}) => {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+export const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, onSubmit, onCancel }) => {
+  // Initialize the form
+  const form = useForm<InvoiceFormValues>({
+    resolver: zodResolver(invoiceFormSchema),
     defaultValues: {
       customer: invoice?.customer || '',
-      date: invoice?.date || new Date().toISOString().split('T')[0],
-      dueDate: invoice?.dueDate || new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
-      status: invoice?.status || 'draft',
+      dueDate: invoice?.dueDate || new Date().toISOString().split('T')[0],
+      notes: invoice?.notes || '',
       items: invoice?.items || [
         { product: '', description: '', quantity: 1, price: 0 }
       ],
-      notes: invoice?.notes || '',
     },
   });
-  
-  const items = form.watch('items');
-  
+
+  // Function to add a new item
   const addItem = () => {
     const currentItems = form.getValues('items') || [];
     form.setValue('items', [
@@ -92,37 +86,24 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
       { product: '', description: '', quantity: 1, price: 0 }
     ]);
   };
-  
+
+  // Function to remove an item
   const removeItem = (index: number) => {
     const currentItems = form.getValues('items');
     form.setValue('items', currentItems.filter((_, i) => i !== index));
   };
-  
-  // Handle product selection and auto-populate price
-  const handleProductChange = (index: number, productId: string) => {
-    const product = sampleProducts.find(p => p.id === productId);
-    if (product) {
-      form.setValue(`items.${index}.price`, product.price);
-    }
-  };
-  
+
   // Calculate totals
   const calculateSubtotal = (items: any[]) => {
     return items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
   };
-  
-  const calculateTax = (subtotal: number) => {
-    return subtotal * 0.1; // 10% tax
-  };
-  
-  const calculateTotal = (subtotal: number, tax: number) => {
-    return subtotal + tax;
-  };
-  
-  const subtotal = calculateSubtotal(items);
-  const tax = calculateTax(subtotal);
-  const total = calculateTotal(subtotal, tax);
-  
+
+  // Watch form values for calculations
+  const watchItems = form.watch('items');
+  const subtotal = calculateSubtotal(watchItems);
+  const tax = subtotal * 0.1; // 10% tax
+  const total = subtotal + tax;
+
   // Format currency
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -131,250 +112,205 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
       minimumFractionDigits: 2,
     }).format(amount);
   };
-  
+
+  // Handle product selection
+  const handleProductSelect = (productId: string, index: number) => {
+    const product = mockProducts.find(p => p.id === productId);
+    if (product) {
+      const currentItems = form.getValues('items');
+      currentItems[index].price = product.price;
+      form.setValue('items', currentItems);
+    }
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Card className="shadow-sm">
-          <CardContent className="p-4 space-y-4">
-            <h3 className="text-lg font-medium">Invoice Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="customer"
-                render={({ field }: { field: any }) => (
-                  <FormItem>
-                    <FormLabel>Customer</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select customer" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {sampleCustomers.map(customer => (
-                          <SelectItem key={customer.id} value={customer.id}>
-                            {customer.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }: { field: any }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="draft">Draft</SelectItem>
-                        <SelectItem value="sent">Sent</SelectItem>
-                        <SelectItem value="paid">Paid</SelectItem>
-                        <SelectItem value="overdue">Overdue</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }: { field: any }) => (
-                  <FormItem>
-                    <FormLabel>Invoice Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="dueDate"
-                render={({ field }: { field: any }) => (
-                  <FormItem>
-                    <FormLabel>Due Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="customer"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Customer</FormLabel>
+                <Select 
+                  onValueChange={field.onChange} 
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select customer" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {mockCustomers.map(customer => (
+                      <SelectItem key={customer.id} value={customer.name}>
+                        {customer.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="dueDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Due Date</FormLabel>
+                <FormControl>
+                  <Input type="date" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <Separator />
+
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-medium">Invoice Items</h3>
-            <Button 
-              type="button" 
-              variant="outline" 
-              size="sm" 
-              onClick={addItem}
-            >
+            <Button type="button" variant="outline" size="sm" onClick={addItem}>
               <PlusIcon className="h-4 w-4 mr-2" />
               Add Item
             </Button>
           </div>
-          
-          {items.map((_, index) => (
+
+          {watchItems.map((_, index) => (
             <Card key={index} className="shadow-sm">
               <CardContent className="p-4 space-y-4">
                 <div className="flex justify-between items-start">
                   <h4 className="font-medium">Item {index + 1}</h4>
-                  {items.length > 1 && (
+                  {watchItems.length > 1 && (
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
                       onClick={() => removeItem(index)}
                     >
-                      <TrashIcon className="h-4 w-4 text-destructive" />
+                      <Trash2Icon className="h-4 w-4 text-destructive" />
                     </Button>
                   )}
                 </div>
-                
-                <div className="grid grid-cols-12 gap-4 items-end">
-                  <div className="col-span-12 md:col-span-4">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.product`}
-                      render={({ field }: { field: any }) => (
-                        <FormItem>
-                          <FormLabel>Product</FormLabel>
-                          <Select 
-                            onValueChange={(value: string) => {
-                              field.onChange(value);
-                              handleProductChange(index, value);
-                            }} 
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select product" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {sampleProducts.map(product => (
-                                <SelectItem key={product.id} value={product.id}>
-                                  {product.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
-                  <div className="col-span-12 md:col-span-3">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.description`}
-                      render={({ field }: { field: any }) => (
-                        <FormItem>
-                          <FormLabel>Description</FormLabel>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.product`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product</FormLabel>
+                        <Select 
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            handleProductSelect(value, index);
+                          }} 
+                          defaultValue={field.value}
+                        >
                           <FormControl>
-                            <Input placeholder="Description" {...field} />
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select product" />
+                            </SelectTrigger>
                           </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
-                  <div className="col-span-4 md:col-span-2">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.quantity`}
-                      render={({ field }: { field: any }) => (
-                        <FormItem>
-                          <FormLabel>Quantity</FormLabel>
-                          <FormControl>
-                            <Input type="number" min="1" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
-                  <div className="col-span-8 md:col-span-3">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.price`}
-                      render={({ field }: { field: any }) => (
-                        <FormItem>
-                          <FormLabel>Unit Price</FormLabel>
-                          <FormControl>
-                            <Input type="number" step="0.01" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                          <SelectContent>
+                            {mockProducts.map(product => (
+                              <SelectItem key={product.id} value={product.id}>
+                                {product.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.description`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description (Optional)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Item description" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.quantity`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Quantity</FormLabel>
+                        <FormControl>
+                          <Input type="number" min={1} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.price`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Price</FormLabel>
+                        <FormControl>
+                          <Input type="number" step="0.01" min={0} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
-        
-        <Card className="shadow-sm">
-          <CardContent className="p-4 space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Subtotal</span>
-              <span>{formatCurrency(subtotal)}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Tax (10%)</span>
-              <span>{formatCurrency(tax)}</span>
-            </div>
-            <Separator />
-            <div className="flex justify-between items-center font-medium">
-              <span>Total</span>
-              <span className="text-lg">{formatCurrency(total)}</span>
-            </div>
-          </CardContent>
-        </Card>
-        
+
         <FormField
           control={form.control}
           name="notes"
-          render={({ field }: { field: any }) => (
+          render={({ field }) => (
             <FormItem>
-              <FormLabel>Notes</FormLabel>
+              <FormLabel>Notes (Optional)</FormLabel>
               <FormControl>
-                <Input placeholder="Any additional notes..." {...field} />
+                <Input placeholder="Additional notes or instructions" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        
+
+        <Separator />
+
+        <Card className="shadow-sm">
+          <CardContent className="p-4 space-y-2">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Subtotal:</span>
+              <span>{formatCurrency(subtotal)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Tax (10%):</span>
+              <span>{formatCurrency(tax)}</span>
+            </div>
+            <Separator className="my-2" />
+            <div className="flex justify-between font-medium text-lg">
+              <span>Total:</span>
+              <span>{formatCurrency(total)}</span>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="flex justify-end gap-3">
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel

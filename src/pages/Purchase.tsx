@@ -1,18 +1,19 @@
+
 import React, { useState } from 'react';
-import { PageTransition } from '../components/transitions/PageTransition';
-import DashboardLayout from '../layout/DashboardLayout';
+import { PageTransition } from '@/components/transitions/PageTransition';
+import DashboardLayout from '@/layout/DashboardLayout';
 import { toast } from 'sonner';
-import { PurchaseHeader } from '../components/purchase/PurchaseHeader';
-import { PurchaseTabContent } from '../components/purchase/PurchaseTabContent';
+import { PurchaseHeader } from '@/components/purchase/PurchaseHeader';
+import { PurchaseTabContent } from '@/components/purchase/PurchaseTabContent';
 import { 
   Dialog, 
   DialogContent, 
   DialogHeader, 
   DialogTitle,
   DialogDescription
-} from '../components/ui/dialog';
-import { ScrollArea } from '../components/ui/scroll-area';
-import { PurchaseOrderForm } from '../components/purchase/PurchaseOrderForm';
+} from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { PurchaseOrderForm } from '@/components/purchase/PurchaseOrderForm';
 
 const Purchase = () => {
   // This is a placeholder until we implement the full Purchase context

@@ -1,26 +1,26 @@
 
 import React, { useState } from 'react';
-import { PageTransition } from '../components/transitions/PageTransition';
-import DashboardLayout from '../layout/DashboardLayout';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { PageTransition } from '@/components/transitions/PageTransition';
+import DashboardLayout from '@/layout/DashboardLayout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   FilterIcon, 
   PlusIcon, 
   SearchIcon 
 } from 'lucide-react';
-import { TransactionList } from '../components/transactions/TransactionList';
-import { TransactionForm } from '../components/transactions/TransactionForm';
-import { Transaction } from '../services/transactionService';
-import { useTransactions } from '../context/TransactionContext';
+import { TransactionList } from '@/components/transactions/TransactionList';
+import { TransactionForm } from '@/components/transactions/TransactionForm';
+import { Transaction } from '@/services/transactionService';
+import { useTransactions } from '@/context/TransactionContext';
 import { 
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle, 
   DialogTrigger 
-} from '../components/ui/dialog';
+} from '@/components/ui/dialog';
 import { toast } from 'sonner';
 
 const Transactions = () => {
